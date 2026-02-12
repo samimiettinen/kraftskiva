@@ -588,7 +588,34 @@ export function playSongMelody(melodyName: string) {
 
   const melodyGain = ctx.createGain();
   melodyGain.gain.value = 0.18;
-  melodyGain.connect(ctx.destination);
+
+  // Create simple reverb using delays and feedback
+  const dryGain = ctx.createGain();
+  dryGain.gain.value = 0.7;
+  
+  const wetGain = ctx.createGain();
+  wetGain.gain.value = 0.3;
+
+  // Multiple delays at different times for diffuse reverb
+  const delays: { delay: DelayNode; gain: GainNode }[] = [];
+  const delayTimes = [0.037, 0.041, 0.043, 0.047]; // Prime numbers for natural diffusion
+  
+  delayTimes.forEach((time) => {
+    const delay = ctx.createDelay(0.1);
+    const gain = ctx.createGain();
+    delay.delayTime.value = time;
+    gain.gain.value = 0.4;
+    delay.connect(gain);
+    gain.connect(wetGain);
+    delays.push({ delay, gain });
+  });
+
+  melodyGain.connect(dryGain).connect(ctx.destination);
+  melodyGain.connect(delays[0].delay);
+  delays.forEach((d, i) => {
+    if (i > 0) d.delay.connect(delays[i - 1].delay);
+  });
+  wetGain.connect(ctx.destination);
 
   const bassGain = ctx.createGain();
   bassGain.gain.value = 0.10;
