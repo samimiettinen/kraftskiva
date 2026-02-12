@@ -289,6 +289,11 @@ export function playSongMelody(melodyName: string) {
   melodyGain.gain.value = 0.12;
   melodyGain.connect(ctx.destination);
 
+  const bassGain = ctx.createGain();
+  bassGain.gain.value = 0.08; // Slightly quieter than melody
+  bassGain.connect(ctx.destination);
+
+  // Play melody
   let offset = 0;
   melody.notes.forEach((note) => {
     if (note.freq > 0) {
@@ -308,6 +313,29 @@ export function playSongMelody(melodyName: string) {
     }
     offset += note.dur * beatDur;
   });
+
+  // Play bass line if available
+  if (melody.bassLine) {
+    let bassOffset = 0;
+    melody.bassLine.forEach((note) => {
+      if (note.freq > 0) {
+        const startTime = ctx.currentTime + bassOffset;
+        const noteDur = note.dur * beatDur;
+
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "sine"; // Bass sounds better with sine wave
+        osc.frequency.value = note.freq;
+        g.gain.setValueAtTime(0.12, startTime);
+        g.gain.exponentialRampToValueAtTime(0.001, startTime + noteDur * 0.95);
+        osc.connect(g).connect(bassGain);
+        osc.start(startTime);
+        osc.stop(startTime + noteDur);
+        melodyOscillators.push(osc);
+      }
+      bassOffset += note.dur * beatDur;
+    });
+  }
 
   // Loop the melody
   const totalDur = offset * 1000;
