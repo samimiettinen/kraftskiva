@@ -492,8 +492,104 @@ export function playClick() {
 import { getMelodyForSong, type Melody } from "@/lib/melodies";
 
 let melodyTimeouts: ReturnType<typeof setTimeout>[] = [];
+let melodySourceNodes: AudioBufferSourceNode[] = [];
 let melodyOscillators: OscillatorNode[] = [];
 let melodyPlaying = false;
+
+/**
+ * Karplus-Strong plucked string synthesis.
+ * Creates a guitar-like tone entirely with Web Audio API.
+ */
+function playPluckedString(
+  ctx: AudioContext,
+  freq: number,
+  startTime: number,
+  duration: number,
+  destination: AudioNode,
+  volume = 0.15
+) {
+  if (freq <= 0) return;
+
+  const sampleRate = ctx.sampleRate;
+  const periodSamples = Math.round(sampleRate / freq);
+  // Buffer long enough for the note duration + decay tail
+  const bufferLength = Math.ceil(sampleRate * (duration + 0.3));
+  const buffer = ctx.createBuffer(1, bufferLength, sampleRate);
+  const data = buffer.getChannelData(0);
+
+  // Initialize delay line with noise burst (excitation)
+  for (let i = 0; i < periodSamples; i++) {
+    data[i] = (Math.random() * 2 - 1) * volume;
+  }
+
+  // Karplus-Strong: each sample = average of sample one period ago and its neighbor
+  // with a slight damping factor for warmth
+  const damping = 0.996;
+  for (let i = periodSamples; i < bufferLength; i++) {
+    data[i] = damping * 0.5 * (data[i - periodSamples] + data[i - periodSamples + 1]);
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  // Gentle low-pass to soften the attack slightly
+  const lp = ctx.createBiquadFilter();
+  lp.type = "lowpass";
+  lp.frequency.value = Math.min(freq * 6, 8000);
+  lp.Q.value = 0.5;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(1.0, startTime);
+  gain.gain.setValueAtTime(1.0, startTime + duration * 0.7);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.2);
+
+  source.connect(lp).connect(gain).connect(destination);
+  source.start(startTime);
+  source.stop(startTime + duration + 0.3);
+  melodySourceNodes.push(source);
+}
+
+/**
+ * Play a warm acoustic bass note using sine + slight harmonics
+ */
+function playBassTone(
+  ctx: AudioContext,
+  freq: number,
+  startTime: number,
+  duration: number,
+  destination: AudioNode
+) {
+  if (freq <= 0) return;
+
+  // Fundamental
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = "sine";
+  osc.frequency.value = freq;
+  g.gain.setValueAtTime(0.12, startTime);
+  g.gain.setValueAtTime(0.10, startTime + duration * 0.6);
+  g.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.95);
+
+  // Add subtle 2nd harmonic for body
+  const osc2 = ctx.createOscillator();
+  const g2 = ctx.createGain();
+  osc2.type = "sine";
+  osc2.frequency.value = freq * 2;
+  g2.gain.setValueAtTime(0.03, startTime);
+  g2.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.7);
+
+  const lp = ctx.createBiquadFilter();
+  lp.type = "lowpass";
+  lp.frequency.value = 600;
+
+  osc.connect(g).connect(lp).connect(destination);
+  osc2.connect(g2).connect(lp);
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+  osc2.start(startTime);
+  osc2.stop(startTime + duration);
+  melodyOscillators.push(osc, osc2);
+}
 
 export function playSongMelody(melodyName: string) {
   if (audioMuted) return;
@@ -505,76 +601,46 @@ export function playSongMelody(melodyName: string) {
   const beatDur = 60 / melody.bpm;
 
   const melodyGain = ctx.createGain();
-  melodyGain.gain.value = 0.12;
+  melodyGain.gain.value = 0.18;
   melodyGain.connect(ctx.destination);
 
   const bassGain = ctx.createGain();
-  bassGain.gain.value = 0.08; // Slightly quieter than melody
+  bassGain.gain.value = 0.10;
   bassGain.connect(ctx.destination);
 
-  // Play melody
+  // Play melody with plucked string synthesis
   let offset = 0;
   melody.notes.forEach((note) => {
+    const noteDur = note.dur * beatDur;
     if (note.freq > 0) {
-      const startTime = ctx.currentTime + offset;
-      const noteDur = note.dur * beatDur;
-
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = melody.waveform;
-      osc.frequency.value = note.freq;
-      g.gain.setValueAtTime(0.15, startTime);
-      g.gain.exponentialRampToValueAtTime(0.001, startTime + noteDur * 0.95);
-      osc.connect(g).connect(melodyGain);
-      osc.start(startTime);
-      osc.stop(startTime + noteDur);
-      melodyOscillators.push(osc);
+      playPluckedString(ctx, note.freq, ctx.currentTime + offset, noteDur, melodyGain, 0.18);
     }
-    offset += note.dur * beatDur;
+    offset += noteDur;
   });
 
-  // Play bass line if available
+  // Play bass line with warm bass tone
   if (melody.bassLine) {
     let bassOffset = 0;
     melody.bassLine.forEach((note) => {
+      const noteDur = note.dur * beatDur;
       if (note.freq > 0) {
-        const startTime = ctx.currentTime + bassOffset;
-        const noteDur = note.dur * beatDur;
-
-        const osc = ctx.createOscillator();
-        const g = ctx.createGain();
-        osc.type = "sine"; // Bass sounds better with sine wave
-        osc.frequency.value = note.freq;
-        g.gain.setValueAtTime(0.12, startTime);
-        g.gain.exponentialRampToValueAtTime(0.001, startTime + noteDur * 0.95);
-        osc.connect(g).connect(bassGain);
-        osc.start(startTime);
-        osc.stop(startTime + noteDur);
-        melodyOscillators.push(osc);
+        playBassTone(ctx, note.freq, ctx.currentTime + bassOffset, noteDur, bassGain);
       }
-      bassOffset += note.dur * beatDur;
+      bassOffset += noteDur;
     });
   }
 
   // Play drum pattern if available
   if (melody.drumPattern) {
     const drum = melody.drumPattern;
-    const patternDur = drum.barsPerPattern * beatDur * 4; // 4 beats per bar
-
-    // Schedule drums across pattern
     drum.kicks.forEach((beatPos) => {
-      const startTime = ctx.currentTime + beatPos * beatDur;
-      playKickDrum(startTime - ctx.currentTime);
+      playKickDrum(beatPos * beatDur);
     });
-
     drum.snares.forEach((beatPos) => {
-      const startTime = ctx.currentTime + beatPos * beatDur;
-      playSnare(startTime - ctx.currentTime);
+      playSnare(beatPos * beatDur);
     });
-
     drum.hiHats.forEach((beatPos) => {
-      const startTime = ctx.currentTime + beatPos * beatDur;
-      playHiHat(startTime - ctx.currentTime);
+      playHiHat(beatPos * beatDur);
     });
   }
 
@@ -594,4 +660,8 @@ export function stopSongMelody() {
     try { o.stop(); } catch {}
   });
   melodyOscillators = [];
+  melodySourceNodes.forEach((s) => {
+    try { s.stop(); } catch {}
+  });
+  melodySourceNodes = [];
 }
