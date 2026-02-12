@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import heroImage from "@/assets/hero-crayfish.jpg";
-import { playClick, startBackgroundMusic } from "@/lib/sounds";
+import { playClick } from "@/lib/sounds";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -52,7 +52,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           className="flex flex-col gap-4 items-center"
         >
           <button
-            onClick={() => { playClick(); startBackgroundMusic(); onStart(); }}
+            onClick={() => { playClick(); onStart(); }}
             className="bg-primary text-primary-foreground font-display text-2xl font-bold px-12 py-5 rounded-full cartoon-border hover:scale-105 active:scale-95 transition-transform animate-pulse-glow"
           >
             🥃 Start the Party! 🥃

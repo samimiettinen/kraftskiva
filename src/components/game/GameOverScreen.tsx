@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Confetti from "@/components/game/Confetti";
-import { playVictoryFanfare, stopBackgroundMusic } from "@/lib/sounds";
+import { playVictoryFanfare } from "@/lib/sounds";
 
 interface GameOverScreenProps {
   swedishName: string;
@@ -27,7 +27,6 @@ export default function GameOverScreen({
   const winnerColor = winner === "swedish" ? "text-swedish-blue" : "text-finnish-blue";
 
   useEffect(() => {
-    stopBackgroundMusic();
     playVictoryFanfare();
   }, []);
 
