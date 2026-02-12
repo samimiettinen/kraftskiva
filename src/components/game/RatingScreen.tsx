@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Team } from "@/hooks/useGameState";
-import { playStarDing, playApplause } from "@/lib/sounds";
+import { playStarDing, playApplause, playDrumFill } from "@/lib/sounds";
 
 interface RatingScreenProps {
   currentTeam: Team;
@@ -21,7 +21,8 @@ export default function RatingScreen({ currentTeam, performerName, raterName, on
     if (selected === 0) return;
     setSubmitted(true);
     if (selected >= 4) playApplause(2);
-    setTimeout(() => onRate(selected), 800);
+    playDrumFill("breakdown");
+    setTimeout(() => onRate(selected), 1200);
   };
 
   return (

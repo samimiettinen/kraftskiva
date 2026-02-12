@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Team } from "@/hooks/useGameState";
-import { playPourSound, playGlassClink, playCheer } from "@/lib/sounds";
+import { playPourSound, playGlassClink, playCheer, playDrumFill } from "@/lib/sounds";
 
 interface DrinkScreenProps {
   currentTeam: Team;
@@ -98,7 +98,7 @@ export default function DrinkScreen({ currentTeam, playerName, onNext }: DrinkSc
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: "spring" }}
-              onClick={onNext}
+              onClick={() => { playDrumFill("standard"); setTimeout(onNext, 1400); }}
               className="bg-primary text-primary-foreground font-display text-xl font-bold px-10 py-4 rounded-full cartoon-border hover:scale-105 active:scale-95 transition-transform"
             >
               Next Turn →

@@ -314,6 +314,164 @@ export function playHiHat(time = 0) {
   noise.start(t);
 }
 
+/* ───── Drum Fills / Transitions ───── */
+export function playDrumFill(style: "standard" | "buildup" | "breakdown" = "standard") {
+  if (audioMuted) return;
+  const ctx = getCtx();
+  const t = ctx.currentTime;
+
+  if (style === "standard") {
+    // Classic snare roll building up with kick accents
+    const steps = 16;
+    for (let i = 0; i < steps; i++) {
+      const time = i * 0.08;
+      const vol = 0.05 + (i / steps) * 0.2;
+
+      // Snare hits getting faster
+      const noise = ctx.createBufferSource();
+      const buf = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let j = 0; j < d.length; j++) d[j] = (Math.random() * 2 - 1) * vol;
+      noise.buffer = buf;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(vol, t + time);
+      g.gain.exponentialRampToValueAtTime(0.001, t + time + 0.08);
+      noise.connect(g).connect(ctx.destination);
+      noise.start(t + time);
+
+      // Kick on every 4th hit
+      if (i % 4 === 0) {
+        const osc = ctx.createOscillator();
+        const kg = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(120, t + time);
+        osc.frequency.exponentialRampToValueAtTime(0.01, t + time + 0.3);
+        kg.gain.setValueAtTime(vol * 1.5, t + time);
+        kg.gain.exponentialRampToValueAtTime(0.001, t + time + 0.3);
+        osc.connect(kg).connect(ctx.destination);
+        osc.start(t + time);
+        osc.stop(t + time + 0.35);
+      }
+    }
+    // Final crash cymbal
+    const crash = ctx.createBufferSource();
+    const crashBuf = ctx.createBuffer(1, ctx.sampleRate * 0.8, ctx.sampleRate);
+    const cd = crashBuf.getChannelData(0);
+    for (let i = 0; i < cd.length; i++) cd[i] = (Math.random() * 2 - 1);
+    crash.buffer = crashBuf;
+    const chpf = ctx.createBiquadFilter();
+    chpf.type = "highpass";
+    chpf.frequency.value = 4000;
+    const cg = ctx.createGain();
+    cg.gain.setValueAtTime(0.25, t + steps * 0.08);
+    cg.gain.exponentialRampToValueAtTime(0.001, t + steps * 0.08 + 0.8);
+    crash.connect(chpf).connect(cg).connect(ctx.destination);
+    crash.start(t + steps * 0.08);
+
+    // Big kick at the end
+    const finalKick = ctx.createOscillator();
+    const fkg = ctx.createGain();
+    finalKick.type = "sine";
+    finalKick.frequency.setValueAtTime(180, t + steps * 0.08);
+    finalKick.frequency.exponentialRampToValueAtTime(0.01, t + steps * 0.08 + 0.5);
+    fkg.gain.setValueAtTime(0.5, t + steps * 0.08);
+    fkg.gain.exponentialRampToValueAtTime(0.001, t + steps * 0.08 + 0.5);
+    finalKick.connect(fkg).connect(ctx.destination);
+    finalKick.start(t + steps * 0.08);
+    finalKick.stop(t + steps * 0.08 + 0.55);
+  }
+
+  if (style === "buildup") {
+    // Accelerating tom-tom pattern building to a crash
+    const tomFreqs = [200, 170, 140, 120]; // descending toms
+    let offset = 0;
+    for (let rep = 0; rep < 3; rep++) {
+      const speed = 0.2 - rep * 0.05; // Gets faster each repetition
+      tomFreqs.forEach((freq) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t + offset);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.5, t + offset + speed);
+        g.gain.setValueAtTime(0.25 + rep * 0.05, t + offset);
+        g.gain.exponentialRampToValueAtTime(0.001, t + offset + speed);
+        osc.connect(g).connect(ctx.destination);
+        osc.start(t + offset);
+        osc.stop(t + offset + speed + 0.05);
+        offset += speed;
+      });
+    }
+    // Crash + kick finale
+    const crash = ctx.createBufferSource();
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 1.0, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1);
+    crash.buffer = buf;
+    const hpf = ctx.createBiquadFilter();
+    hpf.type = "highpass";
+    hpf.frequency.value = 3500;
+    const cg = ctx.createGain();
+    cg.gain.setValueAtTime(0.3, t + offset);
+    cg.gain.exponentialRampToValueAtTime(0.001, t + offset + 1.0);
+    crash.connect(hpf).connect(cg).connect(ctx.destination);
+    crash.start(t + offset);
+  }
+
+  if (style === "breakdown") {
+    // Sparse, dramatic hits with space between
+    const hits = [
+      { time: 0, type: "kick" as const },
+      { time: 0.3, type: "snare" as const },
+      { time: 0.5, type: "kick" as const },
+      { time: 0.65, type: "hihat" as const },
+      { time: 0.8, type: "snare" as const },
+      { time: 0.9, type: "hihat" as const },
+      { time: 0.95, type: "hihat" as const },
+      { time: 1.0, type: "kick" as const },
+      { time: 1.0, type: "snare" as const },
+    ];
+    hits.forEach(({ time: hitTime, type }) => {
+      if (type === "kick") {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(140, t + hitTime);
+        osc.frequency.exponentialRampToValueAtTime(0.01, t + hitTime + 0.4);
+        g.gain.setValueAtTime(0.4, t + hitTime);
+        g.gain.exponentialRampToValueAtTime(0.001, t + hitTime + 0.4);
+        osc.connect(g).connect(ctx.destination);
+        osc.start(t + hitTime);
+        osc.stop(t + hitTime + 0.45);
+      } else if (type === "snare") {
+        const noise = ctx.createBufferSource();
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 0.15, ctx.sampleRate);
+        const d = buf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * 0.6;
+        noise.buffer = buf;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.3, t + hitTime);
+        g.gain.exponentialRampToValueAtTime(0.001, t + hitTime + 0.12);
+        noise.connect(g).connect(ctx.destination);
+        noise.start(t + hitTime);
+      } else {
+        const noise = ctx.createBufferSource();
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 0.06, ctx.sampleRate);
+        const d = buf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1);
+        noise.buffer = buf;
+        const hpf = ctx.createBiquadFilter();
+        hpf.type = "highpass";
+        hpf.frequency.value = 8000;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.15, t + hitTime);
+        g.gain.exponentialRampToValueAtTime(0.001, t + hitTime + 0.06);
+        noise.connect(hpf).connect(g).connect(ctx.destination);
+        noise.start(t + hitTime);
+      }
+    });
+  }
+}
+
 /* ───── Button Click ───── */
 export function playClick() {
   if (audioMuted) return;
