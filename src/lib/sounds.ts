@@ -253,6 +253,67 @@ export function isMusicPlaying() {
   return bgMusicPlaying;
 }
 
+/* ───── Drum Sounds ───── */
+export function playKickDrum(time = 0) {
+  if (audioMuted) return;
+  const ctx = getCtx();
+  const t = ctx.currentTime + time;
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(150, t);
+  osc.frequency.exponentialRampToValueAtTime(0.01, t + 0.5);
+  g.gain.setValueAtTime(0.4, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+  
+  osc.connect(g).connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + 0.5);
+}
+
+export function playSnare(time = 0) {
+  if (audioMuted) return;
+  const ctx = getCtx();
+  const t = ctx.currentTime + time;
+  const noise = ctx.createBufferSource();
+  const buf = ctx.createBuffer(1, ctx.sampleRate * 0.2, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * 0.5;
+  noise.buffer = buf;
+  
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.25, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+  
+  noise.connect(g).connect(ctx.destination);
+  noise.start(t);
+}
+
+export function playHiHat(time = 0) {
+  if (audioMuted) return;
+  const ctx = getCtx();
+  const t = ctx.currentTime + time;
+  const noise = ctx.createBufferSource();
+  const buf = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1);
+  noise.buffer = buf;
+  
+  const hpf = ctx.createBiquadFilter();
+  hpf.type = "highpass";
+  hpf.frequency.value = 8000;
+  
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.15, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  
+  noise.connect(hpf).connect(g).connect(ctx.destination);
+  noise.start(t);
+}
+
 /* ───── Button Click ───── */
 export function playClick() {
   if (audioMuted) return;
@@ -334,6 +395,28 @@ export function playSongMelody(melodyName: string) {
         melodyOscillators.push(osc);
       }
       bassOffset += note.dur * beatDur;
+    });
+  }
+
+  // Play drum pattern if available
+  if (melody.drumPattern) {
+    const drum = melody.drumPattern;
+    const patternDur = drum.barsPerPattern * beatDur * 4; // 4 beats per bar
+
+    // Schedule drums across pattern
+    drum.kicks.forEach((beatPos) => {
+      const startTime = ctx.currentTime + beatPos * beatDur;
+      playKickDrum(startTime - ctx.currentTime);
+    });
+
+    drum.snares.forEach((beatPos) => {
+      const startTime = ctx.currentTime + beatPos * beatDur;
+      playSnare(startTime - ctx.currentTime);
+    });
+
+    drum.hiHats.forEach((beatPos) => {
+      const startTime = ctx.currentTime + beatPos * beatDur;
+      playHiHat(startTime - ctx.currentTime);
     });
   }
 
