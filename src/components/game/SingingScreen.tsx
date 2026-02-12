@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Song } from "@/data/songs";
 import { Team } from "@/hooks/useGameState";
-import { playClick } from "@/lib/sounds";
+import { playClick, playSongMelody, stopSongMelody } from "@/lib/sounds";
 
 interface SingingScreenProps {
   song: Song;
@@ -45,9 +45,16 @@ export default function SingingScreen({
 
   const startKaraoke = () => {
     playClick();
+    playSongMelody(song.melody);
     setIsPlaying(true);
     setCurrentLine(0);
   };
+
+  // Stop melody when finished or unmounted
+  useEffect(() => {
+    if (isFinished) stopSongMelody();
+    return () => stopSongMelody();
+  }, [isFinished]);
 
   return (
     <div className={`min-h-screen flex flex-col bg-gradient-to-b ${teamBg} bg-background`}>
