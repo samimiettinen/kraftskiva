@@ -417,8 +417,8 @@ let melodyOscillators: OscillatorNode[] = [];
 let melodyPlaying = false;
 
 /**
- * Karplus-Strong plucked string synthesis.
- * Creates a guitar-like tone entirely with Web Audio API.
+ * Electric guitar synthesis using modified Karplus-Strong.
+ * Creates a bright, punchy, sustained electric guitar tone.
  */
 function playPluckedString(
   ctx: AudioContext,
@@ -433,18 +433,18 @@ function playPluckedString(
   const sampleRate = ctx.sampleRate;
   const periodSamples = Math.round(sampleRate / freq);
   // Buffer long enough for the note duration + decay tail
-  const bufferLength = Math.ceil(sampleRate * (duration + 0.3));
+  const bufferLength = Math.ceil(sampleRate * (duration + 0.5));
   const buffer = ctx.createBuffer(1, bufferLength, sampleRate);
   const data = buffer.getChannelData(0);
 
-  // Initialize delay line with noise burst (excitation)
+  // Initialize delay line with sharp noise burst (bright pluck)
   for (let i = 0; i < periodSamples; i++) {
     data[i] = (Math.random() * 2 - 1) * volume;
   }
 
-  // Karplus-Strong: each sample = average of sample one period ago and its neighbor
-  // with a slight damping factor for warmth
-  const damping = 0.996;
+  // Karplus-Strong with less damping for electric sustain
+  // Higher damping = more sustain = electric guitar character
+  const damping = 0.9985;
   for (let i = periodSamples; i < bufferLength; i++) {
     data[i] = damping * 0.5 * (data[i - periodSamples] + data[i - periodSamples + 1]);
   }
@@ -452,18 +452,24 @@ function playPluckedString(
   const source = ctx.createBufferSource();
   source.buffer = buffer;
 
-  // Gentle low-pass to soften the attack slightly
+  // Brighter low-pass filter for electric guitar punch
   const lp = ctx.createBiquadFilter();
   lp.type = "lowpass";
-  lp.frequency.value = Math.min(freq * 6, 8000);
-  lp.Q.value = 0.5;
+  lp.frequency.value = Math.min(freq * 8, 10000);
+  lp.Q.value = 0.3;
+
+  // Add some brightness with a high-pass shelf
+  const hp = ctx.createBiquadFilter();
+  hp.type = "highpass";
+  hp.frequency.value = freq * 0.5;
+  hp.Q.value = 0.4;
 
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(1.0, startTime);
-  gain.gain.setValueAtTime(1.0, startTime + duration * 0.7);
-  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.2);
+  gain.gain.setValueAtTime(0.9, startTime + duration * 0.5);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.3);
 
-  source.connect(lp).connect(gain).connect(destination);
+  source.connect(hp).connect(lp).connect(gain).connect(destination);
   source.start(startTime);
   source.stop(startTime + duration + 0.3);
   melodySourceNodes.push(source);
