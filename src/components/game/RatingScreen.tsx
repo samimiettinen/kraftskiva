@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Team } from "@/hooks/useGameState";
+import { playStarDing, playApplause } from "@/lib/sounds";
 
 interface RatingScreenProps {
   currentTeam: Team;
@@ -19,6 +20,7 @@ export default function RatingScreen({ currentTeam, performerName, raterName, on
   const handleSubmit = () => {
     if (selected === 0) return;
     setSubmitted(true);
+    if (selected >= 4) playApplause(2);
     setTimeout(() => onRate(selected), 800);
   };
 
@@ -45,7 +47,7 @@ export default function RatingScreen({ currentTeam, performerName, raterName, on
               key={star}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
-              onClick={() => setSelected(star)}
+              onClick={() => { setSelected(star); playStarDing(0.8 + star * 0.15); }}
               className={`text-5xl transition-all ${
                 star <= selected ? "drop-shadow-lg" : "opacity-30 grayscale"
               }`}
