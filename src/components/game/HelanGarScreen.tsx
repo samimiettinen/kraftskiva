@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Song } from "@/data/songs";
-import { playGlassClink } from "@/lib/sounds";
+import { playGlassClink, playSongMelody, stopSongMelody } from "@/lib/sounds";
 
 interface HelanGarScreenProps {
   song: Song;
@@ -8,6 +9,11 @@ interface HelanGarScreenProps {
 }
 
 export default function HelanGarScreen({ song, onFinish }: HelanGarScreenProps) {
+  useEffect(() => {
+    playSongMelody(song.melody);
+    return () => stopSongMelody();
+  }, [song.melody]);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
       <motion.div

@@ -268,3 +268,61 @@ export function playClick() {
   osc.start(t);
   osc.stop(t + 0.1);
 }
+
+/* ───── Song Melody Player ───── */
+import { getMelodyForSong, type Melody } from "@/lib/melodies";
+
+let melodyTimeouts: ReturnType<typeof setTimeout>[] = [];
+let melodyOscillators: OscillatorNode[] = [];
+let melodyPlaying = false;
+
+export function playSongMelody(melodyName: string) {
+  if (audioMuted) return;
+  stopSongMelody();
+  melodyPlaying = true;
+
+  const melody = getMelodyForSong(melodyName);
+  const ctx = getCtx();
+  const beatDur = 60 / melody.bpm;
+
+  const melodyGain = ctx.createGain();
+  melodyGain.gain.value = 0.12;
+  melodyGain.connect(ctx.destination);
+
+  let offset = 0;
+  melody.notes.forEach((note) => {
+    if (note.freq > 0) {
+      const startTime = ctx.currentTime + offset;
+      const noteDur = note.dur * beatDur;
+
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = melody.waveform;
+      osc.frequency.value = note.freq;
+      g.gain.setValueAtTime(0.15, startTime);
+      g.gain.exponentialRampToValueAtTime(0.001, startTime + noteDur * 0.95);
+      osc.connect(g).connect(melodyGain);
+      osc.start(startTime);
+      osc.stop(startTime + noteDur);
+      melodyOscillators.push(osc);
+    }
+    offset += note.dur * beatDur;
+  });
+
+  // Loop the melody
+  const totalDur = offset * 1000;
+  const loopTimeout = setTimeout(() => {
+    if (melodyPlaying) playSongMelody(melodyName);
+  }, totalDur - 50);
+  melodyTimeouts.push(loopTimeout);
+}
+
+export function stopSongMelody() {
+  melodyPlaying = false;
+  melodyTimeouts.forEach(clearTimeout);
+  melodyTimeouts = [];
+  melodyOscillators.forEach((o) => {
+    try { o.stop(); } catch {}
+  });
+  melodyOscillators = [];
+}
