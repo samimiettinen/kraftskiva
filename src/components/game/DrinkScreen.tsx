@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Team } from "@/hooks/useGameState";
+import { playPourSound, playGlassClink, playCheer } from "@/lib/sounds";
 
 interface DrinkScreenProps {
   currentTeam: Team;
@@ -20,8 +21,9 @@ export default function DrinkScreen({ currentTeam, playerName, onNext }: DrinkSc
     : "from-finnish-blue/20 to-finnish-white/30";
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStep(1), 500);
-    const t2 = setTimeout(() => setStep(2), 1500);
+    playPourSound();
+    const t1 = setTimeout(() => { setStep(1); playGlassClink(); }, 500);
+    const t2 = setTimeout(() => { setStep(2); playCheer(); }, 1500);
     const t3 = setTimeout(() => setStep(3), 2500);
     return () => {
       clearTimeout(t1);

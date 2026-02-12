@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Song } from "@/data/songs";
 import { Team } from "@/hooks/useGameState";
+import { playClick } from "@/lib/sounds";
 
 interface SingingScreenProps {
   song: Song;
@@ -43,6 +44,7 @@ export default function SingingScreen({
   }, [isPlaying, currentLine, song.lyrics.length]);
 
   const startKaraoke = () => {
+    playClick();
     setIsPlaying(true);
     setCurrentLine(0);
   };
