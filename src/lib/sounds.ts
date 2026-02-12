@@ -1,6 +1,7 @@
 // Web Audio API synthesized sound effects — no external APIs needed
 
 let audioCtx: AudioContext | null = null;
+let audioMuted = false;
 
 function getCtx(): AudioContext {
   if (!audioCtx) audioCtx = new AudioContext();
@@ -8,8 +9,17 @@ function getCtx(): AudioContext {
   return audioCtx;
 }
 
+export function setAudioMuted(muted: boolean) {
+  audioMuted = muted;
+}
+
+export function isAudioMuted(): boolean {
+  return audioMuted;
+}
+
 /* ───── Glass Clink ───── */
 export function playGlassClink() {
+  if (audioMuted) return;
   const ctx = getCtx();
   const t = ctx.currentTime;
 
@@ -47,6 +57,7 @@ export function playGlassClink() {
 
 /* ───── Pour Liquid ───── */
 export function playPourSound() {
+  if (audioMuted) return;
   const ctx = getCtx();
   const t = ctx.currentTime;
   const dur = 1.2;
@@ -70,6 +81,7 @@ export function playPourSound() {
 
 /* ───── Applause ───── */
 export function playApplause(duration = 2) {
+  if (audioMuted) return;
   const ctx = getCtx();
   const t = ctx.currentTime;
   const noise = ctx.createBufferSource();
@@ -96,6 +108,7 @@ export function playApplause(duration = 2) {
 
 /* ───── Cheer / Crowd ───── */
 export function playCheer() {
+  if (audioMuted) return;
   const ctx = getCtx();
   const t = ctx.currentTime;
   // Multiple oscillators for "wooo" vocal quality
@@ -122,6 +135,7 @@ export function playCheer() {
 
 /* ───── Star Ding ───── */
 export function playStarDing(pitch = 1) {
+  if (audioMuted) return;
   const ctx = getCtx();
   const t = ctx.currentTime;
   const osc = ctx.createOscillator();
@@ -137,6 +151,7 @@ export function playStarDing(pitch = 1) {
 
 /* ───── Victory Fanfare ───── */
 export function playVictoryFanfare() {
+  if (audioMuted) return;
   const ctx = getCtx();
   const t = ctx.currentTime;
   const notes = [523, 659, 784, 1047]; // C5 E5 G5 C6
@@ -240,6 +255,7 @@ export function isMusicPlaying() {
 
 /* ───── Button Click ───── */
 export function playClick() {
+  if (audioMuted) return;
   const ctx = getCtx();
   const t = ctx.currentTime;
   const osc = ctx.createOscillator();
