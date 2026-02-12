@@ -234,6 +234,9 @@ export const songs: Song[] = [
 ];
 
 export function getShuffledSongs(): Song[] {
-  const shuffled = [...songs].sort(() => Math.random() - 0.5);
-  return shuffled;
+  return [...songs].sort(() => Math.random() - 0.5);
+}
+
+export function getShuffledSwedishSongs(): Song[] {
+  return [...songs].sort(() => Math.random() - 0.5);
 }
