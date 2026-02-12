@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Song } from "@/data/songs";
-import { playGlassClink, playSongMelody, stopSongMelody } from "@/lib/sounds";
+import { playGlassClink, playSongMelody, stopSongMelody, playDrumFill } from "@/lib/sounds";
 
 interface HelanGarScreenProps {
   song: Song;
@@ -55,7 +55,7 @@ export default function HelanGarScreen({ song, onFinish }: HelanGarScreenProps) 
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 2 }}
-          onClick={() => { playGlassClink(); onFinish(); }}
+          onClick={() => { playGlassClink(); playDrumFill("buildup"); setTimeout(onFinish, 1800); }}
           className="bg-primary text-primary-foreground font-display text-xl font-bold px-10 py-4 rounded-full cartoon-border hover:scale-105 active:scale-95 transition-transform animate-pulse-glow"
         >
           🦞 Start the Battle! 🦞
