@@ -3,7 +3,7 @@ import { Song, helanGar, getShuffledSwedishSongs } from "@/data/songs";
 import { getShuffledFinnishSongs } from "@/data/finnishSongs";
 
 export type Team = "swedish" | "finnish";
-export type GamePhase = "welcome" | "setup" | "helan" | "singing" | "rating" | "drink" | "scoreboard" | "gameover";
+export type GamePhase = "welcome" | "setup" | "helan-swedish" | "helan-finnish" | "singing" | "rating" | "drink" | "scoreboard" | "gameover";
 
 export interface GameState {
   phase: GamePhase;
@@ -67,8 +67,9 @@ export function useGameState() {
     const fiQueue = getShuffledFinnishSongs();
     setState((prev) => ({
       ...prev,
-      phase: "helan",
+      phase: "helan-swedish",
       currentSong: helanGar,
+      currentTeam: "swedish",
       songQueue: swQueue,
       swedishSongQueue: swQueue,
       finnishSongQueue: fiQueue,
@@ -84,12 +85,22 @@ export function useGameState() {
 
   const finishHelan = useCallback(() => {
     setState((prev) => {
+      if (prev.phase === "helan-swedish") {
+        // Move to Finnish team singing the same Swedish Helan Går
+        return {
+          ...prev,
+          phase: "helan-finnish",
+          currentTeam: "finnish",
+          currentSong: helanGar,
+        };
+      }
+      // After Finnish team finishes, start regular singing with team-specific songs
       const { song, newSwIdx, newFiIdx } = pickSongForTeam("swedish", prev.swedishSongQueue, prev.finnishSongQueue, prev.swedishSongIndex, prev.finnishSongIndex);
       return {
         ...prev,
         phase: "singing",
-        currentSong: song,
         currentTeam: "swedish",
+        currentSong: song,
         swedishSongIndex: newSwIdx,
         finnishSongIndex: newFiIdx,
       };
