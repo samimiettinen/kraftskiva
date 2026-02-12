@@ -2,7 +2,7 @@
 const N = {
   C4: 262, D4: 294, E4: 330, F4: 349, G4: 392, A4: 440, B4: 494,
   C5: 523, D5: 587, E5: 659, F5: 698, G5: 784, A5: 880,
-  G3: 196, A3: 220, B3: 247,
+  G3: 196, A3: 220, B3: 247, F3: 175,
   REST: 0,
 } as const;
 
@@ -15,6 +15,8 @@ export interface Melody {
   notes: MelodyNote[];
   bpm: number;
   waveform: OscillatorType;
+  bassLine?: MelodyNote[]; // Accompanying bass notes
+  harmonyLine?: MelodyNote[]; // Optional harmony/chord layer
 }
 
 function n(freq: number, dur: number): MelodyNote {
@@ -42,6 +44,16 @@ const helanGar: Melody = {
     n(N.F5,0.5), n(N.F5,0.5), n(N.F5,0.5), n(N.F5,1),
     n(N.G5,2),
   ],
+  bassLine: [
+    n(N.G3,2), n(N.G3,2),
+    n(N.A3,2), n(N.A3,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.A3,2), n(N.A3,2),
+    n(N.D4,2), n(N.D4,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.D4,2), n(N.D4,2),
+    n(N.G3,4),
+  ],
 };
 
 // Twinkle Twinkle / Blinka lilla stjärna / Bä bä vita lamm
@@ -61,6 +73,14 @@ const twinkleTwinkle: Melody = {
     n(N.F4,1), n(N.F4,1), n(N.E4,1), n(N.E4,1),
     n(N.D4,1), n(N.D4,1), n(N.C4,2),
   ],
+  bassLine: [
+    n(N.C4,2), n(N.G3,2),
+    n(N.F3,2), n(N.C4,2),
+    n(N.C4,4),
+    n(N.C4,2), n(N.G3,2),
+    n(N.F3,2), n(N.C4,2),
+    n(N.C4,4),
+  ],
 };
 
 // Små grodorna (= Frère Jacques)
@@ -77,6 +97,14 @@ const smaGrodorna: Melody = {
     n(N.E4,1), n(N.C4,1),
     n(N.C4,1), n(N.G3,1), n(N.C4,2),
     n(N.C4,1), n(N.G3,1), n(N.C4,2),
+  ],
+  bassLine: [
+    n(N.C4,2), n(N.C4,2),
+    n(N.C4,2), n(N.C4,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.C4,2), n(N.C4,2),
+    n(N.C4,2), n(N.G3,2),
+    n(N.C4,4),
   ],
 };
 
@@ -100,6 +128,14 @@ const ravenRaskar: Melody = {
     n(N.C5,0.5), n(N.D5,0.5), n(N.C5,0.5), n(N.B4,0.5),
     n(N.A4,1), n(N.G4,2),
   ],
+  bassLine: [
+    n(N.G3,2), n(N.G3,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.D4,2), n(N.D4,2),
+    n(N.A3,2), n(N.A3,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.G3,4),
+  ],
 };
 
 // Mors lilla Olle
@@ -113,6 +149,12 @@ const morsLillaOlle: Melody = {
     n(N.A4,1), n(N.A4,0.5), n(N.G4,0.5), n(N.F4,1), n(N.E4,1),
     n(N.D4,1), n(N.F4,0.5), n(N.E4,0.5), n(N.D4,2),
   ],
+  bassLine: [
+    n(N.D4,2), n(N.D4,2),
+    n(N.D4,2), n(N.F4,2),
+    n(N.D4,2), n(N.D4,2),
+    n(N.D4,4),
+  ],
 };
 
 // Vi går över daggstänkta berg
@@ -125,6 +167,11 @@ const daggstanktaBerg: Melody = {
     n(N.D5,1.5), n(N.C5,0.5), n(N.B4,2),
     n(N.D5,1), n(N.E5,1), n(N.D5,1), n(N.C5,1),
     n(N.B4,1), n(N.A4,1), n(N.G4,2),
+  ],
+  bassLine: [
+    n(N.G3,2), n(N.B3,2),
+    n(N.D4,2), n(N.B3,2),
+    n(N.G3,4),
   ],
 };
 
@@ -143,6 +190,13 @@ const uppaKallarbacken: Melody = {
     n(N.E5,0.5), n(N.D5,0.5), n(N.C5,0.5), n(N.B4,0.5),
     n(N.A4,1), n(N.G4,2),
   ],
+  bassLine: [
+    n(N.G3,2), n(N.G3,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.D4,2), n(N.D4,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.G3,4),
+  ],
 };
 
 // Generic cheerful folk melody
@@ -154,6 +208,13 @@ const genericFolk: Melody = {
     n(N.G4,1), n(N.E4,0.5), n(N.G4,0.5), n(N.A4,1),
     n(N.B4,1), n(N.D5,1), n(N.B4,1), n(N.G4,1),
     n(N.A4,1), n(N.B4,0.5), n(N.A4,0.5), n(N.G4,2),
+  ],
+  bassLine: [
+    n(N.G3,2), n(N.G3,2),
+    n(N.D4,2), n(N.D4,2),
+    n(N.A3,2), n(N.A3,2),
+    n(N.G3,2), n(N.G3,2),
+    n(N.G3,4),
   ],
 };
 
