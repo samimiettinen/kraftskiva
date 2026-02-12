@@ -172,10 +172,11 @@ export function playVictoryFanfare() {
   setTimeout(() => playApplause(3), 900);
 }
 
-/* ───── Background Music (Festive Polka Loop) ───── */
+/* ───── Background Music (Festive Polka Loop with Guitar Sound) ───── */
 let bgMusicGain: GainNode | null = null;
 let bgMusicPlaying = false;
-const bgOscillators: OscillatorNode[] = [];
+let bgMusicTimeouts: ReturnType<typeof setTimeout>[] = [];
+let bgMusicSources: AudioBufferSourceNode[] = [];
 
 export function startBackgroundMusic() {
   if (bgMusicPlaying) return;
@@ -183,14 +184,14 @@ export function startBackgroundMusic() {
   bgMusicPlaying = true;
 
   bgMusicGain = ctx.createGain();
-  bgMusicGain.gain.value = 0.04;
+  bgMusicGain.gain.value = 0.06;
   bgMusicGain.connect(ctx.destination);
 
   // Simple repeating polka-ish melody
   const melody = [
     392, 440, 494, 523, 587, 523, 494, 440,
     392, 330, 349, 392, 440, 392, 349, 330,
-  ]; // G4-based folk melody
+  ];
 
   const bass = [196, 196, 247, 247, 262, 262, 220, 220,
                 196, 196, 175, 175, 220, 220, 196, 196];
@@ -203,35 +204,18 @@ export function startBackgroundMusic() {
     const t = ctx2.currentTime;
 
     melody.forEach((freq, i) => {
-      // Melody
-      const osc = ctx2.createOscillator();
-      const g = ctx2.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = freq;
-      g.gain.setValueAtTime(0.06, t + i * noteDur);
-      g.gain.exponentialRampToValueAtTime(0.001, t + i * noteDur + noteDur * 0.9);
-      osc.connect(g).connect(bgMusicGain!);
-      osc.start(t + i * noteDur);
-      osc.stop(t + i * noteDur + noteDur);
-      bgOscillators.push(osc);
+      // Melody with plucked string guitar sound
+      playPluckedString(ctx2, freq, t + i * noteDur, noteDur * 0.9, bgMusicGain!, 0.12);
 
-      // Bass
-      const bOsc = ctx2.createOscillator();
-      const bG = ctx2.createGain();
-      bOsc.type = "sine";
-      bOsc.frequency.value = bass[i];
-      bG.gain.setValueAtTime(0.08, t + i * noteDur);
-      bG.gain.exponentialRampToValueAtTime(0.001, t + i * noteDur + noteDur * 0.9);
-      bOsc.connect(bG).connect(bgMusicGain!);
-      bOsc.start(t + i * noteDur);
-      bOsc.stop(t + i * noteDur + noteDur);
-      bgOscillators.push(bOsc);
+      // Bass with warm tone
+      playBassTone(ctx2, bass[i], t + i * noteDur, noteDur * 0.9, bgMusicGain!);
     });
 
     // Schedule next loop
     const loopDur = melody.length * noteDur * 1000;
     if (bgMusicPlaying) {
-      setTimeout(playLoop, loopDur - 50);
+      const timeout = setTimeout(playLoop, loopDur - 50);
+      bgMusicTimeouts.push(timeout);
     }
   }
 
@@ -240,10 +224,12 @@ export function startBackgroundMusic() {
 
 export function stopBackgroundMusic() {
   bgMusicPlaying = false;
-  bgOscillators.forEach((o) => {
-    try { o.stop(); } catch {}
+  bgMusicTimeouts.forEach(clearTimeout);
+  bgMusicTimeouts = [];
+  bgMusicSources.forEach((s) => {
+    try { s.stop(); } catch {}
   });
-  bgOscillators.length = 0;
+  bgMusicSources = [];
   if (bgMusicGain) {
     bgMusicGain.gain.exponentialRampToValueAtTime(0.001, getCtx().currentTime + 0.5);
   }
