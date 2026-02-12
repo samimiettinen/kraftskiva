@@ -31,36 +31,34 @@ function n(freq: number, dur: number): MelodyNote {
   return { freq, dur };
 }
 
-// Helan Går — traditional Swedish drinking song
+// Helan Går — traditional Swedish drinking song (authentic notation from sheet music)
 const helanGar: Melody = {
-  bpm: 140, waveform: "triangle",
+  bpm: 120, waveform: "triangle",
   notes: [
-    n(N.G4,1), n(N.G4,1), n(N.B4,1), n(N.B4,1),
-    n(N.D5,1.5), n(N.D5,0.5), n(N.B4,1), n(N.REST,0.5),
-    n(N.A4,0.5), n(N.A4,0.5), n(N.A4,0.5), n(N.A4,1),
-    n(N.B4,1), n(N.G4,1), n(N.G4,1),
-    n(N.G4,1), n(N.G4,1), n(N.B4,1), n(N.B4,1),
-    n(N.D5,1.5), n(N.D5,0.5), n(N.B4,1), n(N.REST,0.5),
-    n(N.A4,0.5), n(N.A4,0.5), n(N.A4,0.5), n(N.A4,1),
-    n(N.G4,1), n(N.G4,1), n(N.REST,0.5),
-    n(N.A4,1), n(N.D5,0.5), n(N.D5,0.5), n(N.D5,1),
-    n(N.B4,1), n(N.G4,1), n(N.G4,1),
-    n(N.A4,1), n(N.D5,0.5), n(N.D5,0.5), n(N.D5,1),
-    n(N.B4,1), n(N.G4,1), n(N.G4,1),
-    n(N.G4,1), n(N.G4,1), n(N.B4,1), n(N.B4,1),
-    n(N.D5,1), n(N.D5,1), n(N.G5,1.5),
-    n(N.F5,0.5), n(N.F5,0.5), n(N.F5,0.5), n(N.F5,1),
-    n(N.G5,2),
+    // "He-lan går"
+    n(N.A4, 1), n(N.A4, 1),
+    // "Sjung hoppfal-le-ral la-la-la-lej"
+    n(N.B4, 1), n(N.B4, 0.5), n(N.D5, 0.5), n(N.D5, 1.5),
+    n(N.D5, 0.5), n(N.B4, 1), n(N.REST, 0.5),
+    n(N.A4, 0.5), n(N.A4, 0.5), n(N.A4, 0.5), n(N.A4, 0.5),
+    n(N.B4, 0.5), n(N.B4, 0.5),
+    // "He-lan går, sjung hoppfal-le-ral la-lej"
+    n(N.A4, 1), n(N.A4, 0.5), n(N.REST, 0.5),
+    n(N.B4, 1), n(N.B4, 0.5), n(N.D5, 0.5), n(N.D5, 1),
+    n(N.D5, 0.5), n(N.B4, 0.5), n(N.A4, 1), n(N.REST, 0.5),
+    // "He-lan går, he-lan gâr, gu-târ!"
+    n(N.A4, 1), n(N.A4, 1),
+    n(N.C5, 1), n(N.B4, 1), n(N.A4, 1), n(N.REST, 0.5),
+    n(N.C5, 0.5), n(N.C5, 1), n(N.B4, 1),
+    n(N.A4, 1), n(N.A4, 1),
+    n(N.B4, 1), n(N.C5, 0.5), n(N.B4, 0.5), n(N.A4, 2),
   ],
   bassLine: [
-    n(N.G3,2), n(N.G3,2),
-    n(N.A3,2), n(N.A3,2),
-    n(N.G3,2), n(N.G3,2),
-    n(N.A3,2), n(N.A3,2),
-    n(N.D4,2), n(N.D4,2),
-    n(N.G3,2), n(N.G3,2),
-    n(N.D4,2), n(N.D4,2),
-    n(N.G3,4),
+    n(N.A3, 2), n(N.A3, 2),
+    n(N.E4, 2), n(N.E4, 2),
+    n(N.A3, 2), n(N.A3, 2),
+    n(N.E4, 2), n(N.E4, 2),
+    n(N.A3, 4),
   ],
   drumPattern: {
     kicks: [0, 2, 4, 6],
