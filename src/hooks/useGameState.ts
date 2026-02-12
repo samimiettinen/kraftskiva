@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { Song, helanGar, getShuffledSongs } from "@/data/songs";
+import { Song, helanGar, getShuffledSwedishSongs } from "@/data/songs";
+import { getShuffledFinnishSongs } from "@/data/finnishSongs";
 
 export type Team = "swedish" | "finnish";
 export type GamePhase = "welcome" | "setup" | "helan" | "singing" | "rating" | "drink" | "scoreboard" | "gameover";
@@ -11,6 +12,10 @@ export interface GameState {
   finnishScore: number;
   currentSong: Song | null;
   songQueue: Song[];
+  swedishSongQueue: Song[];
+  finnishSongQueue: Song[];
+  swedishSongIndex: number;
+  finnishSongIndex: number;
   songsPlayed: number;
   totalRounds: number;
   swedishPlayerName: string;
@@ -27,18 +32,48 @@ export function useGameState() {
     finnishScore: 0,
     currentSong: null,
     songQueue: [],
+    swedishSongQueue: [],
+    finnishSongQueue: [],
+    swedishSongIndex: 0,
+    finnishSongIndex: 0,
     songsPlayed: 0,
     totalRounds: TOTAL_ROUNDS,
     swedishPlayerName: "Erik",
     finnishPlayerName: "Matti",
   });
 
+  // Pick a song for a team: 90% own songs, 10% crossover
+  const pickSongForTeam = (team: Team, swQueue: Song[], fiQueue: Song[], swIdx: number, fiIdx: number): { song: Song; newSwIdx: number; newFiIdx: number } => {
+    const useCrossover = Math.random() < 0.1;
+    if (team === "swedish") {
+      if (useCrossover && fiQueue.length > 0) {
+        const song = fiQueue[fiIdx % fiQueue.length];
+        return { song, newSwIdx: swIdx, newFiIdx: fiIdx + 1 };
+      }
+      const song = swQueue[swIdx % swQueue.length];
+      return { song, newSwIdx: swIdx + 1, newFiIdx: fiIdx };
+    } else {
+      if (useCrossover && swQueue.length > 0) {
+        const song = swQueue[swIdx % swQueue.length];
+        return { song, newSwIdx: swIdx + 1, newFiIdx: fiIdx };
+      }
+      const song = fiQueue[fiIdx % fiQueue.length];
+      return { song, newSwIdx: swIdx, newFiIdx: fiIdx + 1 };
+    }
+  };
+
   const startGame = useCallback((swedishName: string, finnishName: string) => {
+    const swQueue = getShuffledSwedishSongs();
+    const fiQueue = getShuffledFinnishSongs();
     setState((prev) => ({
       ...prev,
       phase: "helan",
       currentSong: helanGar,
-      songQueue: getShuffledSongs(),
+      songQueue: swQueue,
+      swedishSongQueue: swQueue,
+      finnishSongQueue: fiQueue,
+      swedishSongIndex: 0,
+      finnishSongIndex: 0,
       swedishPlayerName: swedishName || "Erik",
       finnishPlayerName: finnishName || "Matti",
       swedishScore: 0,
@@ -49,12 +84,14 @@ export function useGameState() {
 
   const finishHelan = useCallback(() => {
     setState((prev) => {
-      const nextSong = prev.songQueue[0];
+      const { song, newSwIdx, newFiIdx } = pickSongForTeam("swedish", prev.swedishSongQueue, prev.finnishSongQueue, prev.swedishSongIndex, prev.finnishSongIndex);
       return {
         ...prev,
         phase: "singing",
-        currentSong: nextSong || null,
+        currentSong: song,
         currentTeam: "swedish",
+        swedishSongIndex: newSwIdx,
+        finnishSongIndex: newFiIdx,
       };
     });
   }, []);
@@ -79,15 +116,16 @@ export function useGameState() {
         return { ...prev, phase: "gameover" };
       }
 
-      const songIndex = isRoundComplete ? prev.songQueue.findIndex((s) => s.id === prev.currentSong?.id) + 1 : prev.songQueue.findIndex((s) => s.id === prev.currentSong?.id);
-      const nextSong = isRoundComplete ? prev.songQueue[songIndex + 1] || prev.songQueue[0] : prev.currentSong;
+      const { song, newSwIdx, newFiIdx } = pickSongForTeam(nextTeam, prev.swedishSongQueue, prev.finnishSongQueue, prev.swedishSongIndex, prev.finnishSongIndex);
 
       return {
         ...prev,
         phase: "singing",
         currentTeam: nextTeam,
-        currentSong: nextSong,
+        currentSong: song,
         songsPlayed: newSongsPlayed,
+        swedishSongIndex: newSwIdx,
+        finnishSongIndex: newFiIdx,
       };
     });
   }, []);
