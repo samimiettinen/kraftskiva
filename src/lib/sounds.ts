@@ -417,8 +417,7 @@ let melodyOscillators: OscillatorNode[] = [];
 let melodyPlaying = false;
 
 /**
- * Vibraphone / synth bell synthesis.
- * Sine fundamental + detuned partial + soft tremolo for warmth.
+ * Synth string tone — sawtooth-based with filtering for a warm, stringy sound.
  */
 function playSynthTone(
   ctx: AudioContext,
@@ -430,54 +429,69 @@ function playSynthTone(
 ) {
   if (freq <= 0) return;
 
-  // Fundamental sine
+  // Sawtooth for rich string harmonics
   const osc1 = ctx.createOscillator();
-  osc1.type = "sine";
+  osc1.type = "sawtooth";
   osc1.frequency.value = freq;
 
-  // Soft 2nd partial for bell character
+  // Slightly detuned second sawtooth for chorus/ensemble width
   const osc2 = ctx.createOscillator();
-  osc2.type = "sine";
-  osc2.frequency.value = freq * 2.0;
+  osc2.type = "sawtooth";
+  osc2.frequency.value = freq * 1.003;
 
-  // 3rd partial very quiet for shimmer
+  // Third detuned down for thickness
   const osc3 = ctx.createOscillator();
-  osc3.type = "sine";
-  osc3.frequency.value = freq * 3.98;
+  osc3.type = "sawtooth";
+  osc3.frequency.value = freq * 0.997;
 
   const g1 = ctx.createGain();
-  g1.gain.setValueAtTime(volume, startTime);
-  g1.gain.exponentialRampToValueAtTime(volume * 0.6, startTime + duration * 0.3);
-  g1.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.4);
+  g1.gain.setValueAtTime(volume * 0.5, startTime);
+  g1.gain.linearRampToValueAtTime(volume, startTime + 0.08);
+  g1.gain.setValueAtTime(volume * 0.8, startTime + duration * 0.5);
+  g1.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.15);
 
   const g2 = ctx.createGain();
-  g2.gain.setValueAtTime(volume * 0.3, startTime);
-  g2.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.5);
+  g2.gain.setValueAtTime(volume * 0.25, startTime);
+  g2.gain.linearRampToValueAtTime(volume * 0.5, startTime + 0.08);
+  g2.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.15);
 
   const g3 = ctx.createGain();
-  g3.gain.setValueAtTime(volume * 0.08, startTime);
-  g3.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.3);
+  g3.gain.setValueAtTime(volume * 0.25, startTime);
+  g3.gain.linearRampToValueAtTime(volume * 0.5, startTime + 0.08);
+  g3.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.15);
 
-  // Tremolo LFO for vibraphone motor effect
+  // Low-pass to tame harsh highs — warm string character
+  const lp = ctx.createBiquadFilter();
+  lp.type = "lowpass";
+  lp.frequency.value = Math.min(freq * 4, 6000);
+  lp.Q.value = 0.7;
+
+  // Subtle slow vibrato for string expressiveness
   const lfo = ctx.createOscillator();
   lfo.type = "sine";
-  lfo.frequency.value = 5.5;
+  lfo.frequency.value = 5.0;
   const lfoGain = ctx.createGain();
-  lfoGain.gain.value = 0.15;
-  lfo.connect(lfoGain).connect(g1.gain);
+  lfoGain.gain.value = freq * 0.006;
+  lfo.connect(lfoGain);
+  lfoGain.connect(osc1.frequency);
+  lfoGain.connect(osc2.frequency);
+  lfoGain.connect(osc3.frequency);
   lfo.start(startTime);
-  lfo.stop(startTime + duration + 0.5);
+  lfo.stop(startTime + duration + 0.2);
 
-  osc1.connect(g1).connect(destination);
-  osc2.connect(g2).connect(destination);
-  osc3.connect(g3).connect(destination);
+  osc1.connect(g1);
+  osc2.connect(g2);
+  osc3.connect(g3);
+  g1.connect(lp).connect(destination);
+  g2.connect(lp);
+  g3.connect(lp);
 
   osc1.start(startTime);
-  osc1.stop(startTime + duration + 0.5);
+  osc1.stop(startTime + duration + 0.2);
   osc2.start(startTime);
-  osc2.stop(startTime + duration + 0.5);
+  osc2.stop(startTime + duration + 0.2);
   osc3.start(startTime);
-  osc3.stop(startTime + duration + 0.5);
+  osc3.stop(startTime + duration + 0.2);
 
   melodyOscillators.push(osc1, osc2, osc3, lfo);
 }
