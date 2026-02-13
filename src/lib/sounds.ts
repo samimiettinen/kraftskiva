@@ -417,62 +417,69 @@ let melodyOscillators: OscillatorNode[] = [];
 let melodyPlaying = false;
 
 /**
- * Electric guitar synthesis using modified Karplus-Strong.
- * Creates a bright, punchy, sustained electric guitar tone.
+ * Vibraphone / synth bell synthesis.
+ * Sine fundamental + detuned partial + soft tremolo for warmth.
  */
-function playPluckedString(
+function playSynthTone(
   ctx: AudioContext,
   freq: number,
   startTime: number,
   duration: number,
   destination: AudioNode,
-  volume = 0.15
+  volume = 0.18
 ) {
   if (freq <= 0) return;
 
-  const sampleRate = ctx.sampleRate;
-  const periodSamples = Math.round(sampleRate / freq);
-  // Buffer long enough for the note duration + decay tail
-  const bufferLength = Math.ceil(sampleRate * (duration + 0.5));
-  const buffer = ctx.createBuffer(1, bufferLength, sampleRate);
-  const data = buffer.getChannelData(0);
+  // Fundamental sine
+  const osc1 = ctx.createOscillator();
+  osc1.type = "sine";
+  osc1.frequency.value = freq;
 
-  // Initialize delay line with sharp noise burst (bright pluck)
-  for (let i = 0; i < periodSamples; i++) {
-    data[i] = (Math.random() * 2 - 1) * volume;
-  }
+  // Soft 2nd partial for bell character
+  const osc2 = ctx.createOscillator();
+  osc2.type = "sine";
+  osc2.frequency.value = freq * 2.0;
 
-  // Karplus-Strong with less damping for electric sustain
-  // Higher damping = more sustain = electric guitar character
-  const damping = 0.9985;
-  for (let i = periodSamples; i < bufferLength; i++) {
-    data[i] = damping * 0.5 * (data[i - periodSamples] + data[i - periodSamples + 1]);
-  }
+  // 3rd partial very quiet for shimmer
+  const osc3 = ctx.createOscillator();
+  osc3.type = "sine";
+  osc3.frequency.value = freq * 3.98;
 
-  const source = ctx.createBufferSource();
-  source.buffer = buffer;
+  const g1 = ctx.createGain();
+  g1.gain.setValueAtTime(volume, startTime);
+  g1.gain.exponentialRampToValueAtTime(volume * 0.6, startTime + duration * 0.3);
+  g1.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.4);
 
-  // Brighter low-pass filter for electric guitar punch
-  const lp = ctx.createBiquadFilter();
-  lp.type = "lowpass";
-  lp.frequency.value = Math.min(freq * 8, 10000);
-  lp.Q.value = 0.3;
+  const g2 = ctx.createGain();
+  g2.gain.setValueAtTime(volume * 0.3, startTime);
+  g2.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.5);
 
-  // Add some brightness with a high-pass shelf
-  const hp = ctx.createBiquadFilter();
-  hp.type = "highpass";
-  hp.frequency.value = freq * 0.5;
-  hp.Q.value = 0.4;
+  const g3 = ctx.createGain();
+  g3.gain.setValueAtTime(volume * 0.08, startTime);
+  g3.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.3);
 
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(1.0, startTime);
-  gain.gain.setValueAtTime(0.9, startTime + duration * 0.5);
-  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration + 0.3);
+  // Tremolo LFO for vibraphone motor effect
+  const lfo = ctx.createOscillator();
+  lfo.type = "sine";
+  lfo.frequency.value = 5.5;
+  const lfoGain = ctx.createGain();
+  lfoGain.gain.value = 0.15;
+  lfo.connect(lfoGain).connect(g1.gain);
+  lfo.start(startTime);
+  lfo.stop(startTime + duration + 0.5);
 
-  source.connect(hp).connect(lp).connect(gain).connect(destination);
-  source.start(startTime);
-  source.stop(startTime + duration + 0.3);
-  melodySourceNodes.push(source);
+  osc1.connect(g1).connect(destination);
+  osc2.connect(g2).connect(destination);
+  osc3.connect(g3).connect(destination);
+
+  osc1.start(startTime);
+  osc1.stop(startTime + duration + 0.5);
+  osc2.start(startTime);
+  osc2.stop(startTime + duration + 0.5);
+  osc3.start(startTime);
+  osc3.stop(startTime + duration + 0.5);
+
+  melodyOscillators.push(osc1, osc2, osc3, lfo);
 }
 
 /**
@@ -561,12 +568,12 @@ export function playSongMelody(melodyName: string) {
   bassGain.gain.value = 0.10;
   bassGain.connect(ctx.destination);
 
-  // Play melody with plucked string synthesis
+  // Play melody with synth vibraphone tone
   let offset = 0;
   melody.notes.forEach((note) => {
     const noteDur = note.dur * beatDur;
     if (note.freq > 0) {
-      playPluckedString(ctx, note.freq, ctx.currentTime + offset, noteDur, melodyGain, 0.18);
+      playSynthTone(ctx, note.freq, ctx.currentTime + offset, noteDur, melodyGain, 0.18);
     }
     offset += noteDur;
   });
@@ -583,19 +590,7 @@ export function playSongMelody(melodyName: string) {
     });
   }
 
-  // Play drum pattern if available
-  if (melody.drumPattern) {
-    const drum = melody.drumPattern;
-    drum.kicks.forEach((beatPos) => {
-      playKickDrum(beatPos * beatDur);
-    });
-    drum.snares.forEach((beatPos) => {
-      playSnare(beatPos * beatDur);
-    });
-    drum.hiHats.forEach((beatPos) => {
-      playHiHat(beatPos * beatDur);
-    });
-  }
+  // Drums removed per user request
 
   // Loop the melody
   const totalDur = offset * 1000;
