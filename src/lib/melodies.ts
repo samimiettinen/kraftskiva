@@ -31,32 +31,52 @@ function n(freq: number, dur: number): MelodyNote {
   return { freq, dur };
 }
 
-// Helan Går — simplified melodia (220 BPM)
+// Helan Går — vibraphone jazz arrangement (arr. Joel S., 220 BPM swing)
 const helanGar: Melody = {
   bpm: 220, waveform: "sine",
   notes: [
-    // Line 1: D D D E8 F♯8
-    n(N.D4, 1), n(N.D4, 1), n(N.D4, 1), n(N.E4, 0.5), n(N.Fs4, 0.5),
-    // Line 2: F♯ E D2
-    n(N.Fs4, 1), n(N.E4, 1), n(N.D4, 2),
-    // Line 3: D D D E8 F♯8
-    n(N.D4, 1), n(N.D4, 1), n(N.D4, 1), n(N.E4, 0.5), n(N.Fs4, 0.5),
-    // Line 4: F♯ E D2
-    n(N.Fs4, 1), n(N.E4, 1), n(N.D4, 2),
-    // Line 5: A A A B8 A8
-    n(N.A4, 1), n(N.A4, 1), n(N.A4, 1), n(N.B4, 0.5), n(N.A4, 0.5),
-    // Line 6: G F♯ E2
-    n(N.G4, 1), n(N.Fs4, 1), n(N.E4, 2),
-    // Line 7: D D D E8 F♯8
-    n(N.D4, 1), n(N.D4, 1), n(N.D4, 1), n(N.E4, 0.5), n(N.Fs4, 0.5),
-    // Line 8: F♯ E D2
-    n(N.Fs4, 1), n(N.E4, 1), n(N.D4, 2),
+    // Bar 1-2: Fmaj7 → Am7
+    n(N.C5, 1), n(N.C5, 2), n(N.F5, 1),
+    n(N.REST, 0.5), n(N.C5, 0.5), n(N.A4, 2), n(N.REST, 0.5), n(N.A4, 0.5),
+    // Bar 3-4: G7 → Cmaj7
+    n(N.G4, 1), n(N.G4, 0.5), n(N.A4, 0.5), n(N.B4, 1), n(N.C5, 1),
+    n(N.C5, 1), n(N.E5, 0.5), n(N.C5, 0.5), n(N.D5, 2),
+    // Bar 5-6: Fmaj7 → Am7
+    n(N.C5, 2), n(N.F5, 1), n(N.REST, 0.5), n(N.C5, 0.5),
+    n(N.A4, 2), n(N.REST, 0.5), n(N.A4, 0.5),
+    // Bar 7-8: G7 → Cmaj7
+    n(N.G4, 1), n(N.G4, 1), n(N.G4, 1), n(N.G4, 1),
+    n(N.REST, 0.5), n(N.E5, 0.5), n(N.C5, 1), n(N.REST, 0.5), n(N.G4, 0.5),
+    // Bar 9-10: Am7 → D7
+    n(N.A4, 0.67), n(N.Fs4, 0.67), n(N.Gs4, 0.67), n(N.A4, 1), n(N.Fs4, 1),
+    n(N.G4, 1), n(N.G4, 1), n(N.G4, 1), n(N.G4, 1),
+    // Bar 11-12: G7 → Cmaj7
+    n(N.REST, 0.5), n(N.G4, 0.5), n(N.E5, 1), n(N.C5, 1), n(N.C5, 1),
+    n(N.Gs4, 0.67), n(N.A4, 0.67), n(N.Gs4, 0.67),
+    // Bar 13-14: Em7 → Am7
+    n(N.E5, 1), n(N.E5, 1), n(N.E5, 1), n(N.E5, 1),
+    n(N.REST, 0.5), n(N.E5, 0.5), n(N.C5, 1), n(N.C5, 1), n(N.REST, 0.5),
+    // Bar 15-16: Gm7 → C7/G
+    n(N.G4, 2), n(N.REST, 0.5), n(N.G4, 0.5),
+    n(N.C5, 1.5), n(N.F5, 0.5), n(N.E5, 2),
+    // Bar 17-18: Fmaj7/A → Dm9 → G7/B
+    n(N.F5, 1), n(N.REST, 0.5), n(N.E5, 0.5), n(N.F5, 1), n(N.E5, 1),
+    n(N.D5, 0.67), n(N.Gs4, 0.67), n(N.A4, 0.67), n(N.B4, 0.67), n(N.Gs4, 0.67), n(N.A4, 0.67),
+    // Bar 19: Cadd9 (final)
+    n(N.C5, 4),
   ],
   bassLine: [
-    n(N.D3, 4), n(N.A3, 4),
-    n(N.D3, 4), n(N.A3, 4),
-    n(N.A3, 4), n(N.E3, 4),
-    n(N.D3, 4),
+    n(N.F3, 4), n(N.A3, 4),
+    n(N.G3, 4), n(N.C3, 4),
+    n(N.F3, 4), n(N.A3, 4),
+    n(N.G3, 4), n(N.C3, 4),
+    n(N.A3, 4), n(N.D3, 4),
+    n(N.G3, 4), n(N.C3, 4),
+    n(N.E3, 4), n(N.A3, 4),
+    n(N.G3, 4), n(N.C3, 4),
+    n(N.F3, 4), n(N.D3, 4),
+    n(N.G3, 4),
+    n(N.C3, 4),
   ],
 };
 
