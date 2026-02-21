@@ -2,6 +2,18 @@ import { Song } from "./songs";
 
 export const finnishSongs: Song[] = [
   {
+    id: "fi-toti",
+    title: "Toti",
+    melody: "Åttopojat",
+    spotifyTrackId: "0l2xfAvM8tba3XWYipn1r2",
+    lyrics: [
+      "Toti, toti, toti,",
+      "anna mulle toti!",
+      "Toti, toti, toti,",
+      "anna mulle toti!",
+    ],
+  },
+  {
     id: "fi-kokonaan",
     title: "Kokonaan!",
     melody: "Helan Går",
