@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import heroImage from "@/assets/hero-crayfish.jpg";
+import finnishBanker from "@/assets/finnish-banker-max.png";
+import swedishBanker from "@/assets/swedish-banker-hanna.png";
 import { playClick } from "@/lib/sounds";
 
 interface WelcomeScreenProps {
@@ -22,6 +24,34 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           className="w-full h-full object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
+      </motion.div>
+
+      {/* Finnish banker - left side */}
+      <motion.div
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.3, type: "spring", stiffness: 80 }}
+        className="absolute left-0 bottom-0 z-10 hidden md:block"
+      >
+        <img
+          src={finnishBanker}
+          alt="Max - Finnish Banker"
+          className="w-48 lg:w-64 xl:w-72 drop-shadow-xl"
+        />
+      </motion.div>
+
+      {/* Swedish banker - right side */}
+      <motion.div
+        initial={{ x: 100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.3, type: "spring", stiffness: 80 }}
+        className="absolute right-0 bottom-0 z-10 hidden md:block"
+      >
+        <img
+          src={swedishBanker}
+          alt="Hanna - Swedish Banker"
+          className="w-48 lg:w-64 xl:w-72 drop-shadow-xl"
+        />
       </motion.div>
 
       <div className="relative z-10 text-center px-4 max-w-2xl">
@@ -64,7 +94,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
               transition={{ repeat: Infinity, duration: 2, delay: 0 }}
               className="text-center"
             >
-              <span className="text-3xl">🇫🇮</span>
+              <img src={finnishBanker} alt="Max" className="w-12 h-12 rounded-full mx-auto" />
               <p className="font-body text-xs text-muted-foreground mt-1">Koskenkorva</p>
               <p className="font-display font-bold text-finnish-blue">"Kippis!"</p>
             </motion.div>
@@ -80,7 +110,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
               transition={{ repeat: Infinity, duration: 2, delay: 1 }}
               className="text-center"
             >
-              <span className="text-3xl">🇸🇪</span>
+              <img src={swedishBanker} alt="Hanna" className="w-12 h-12 rounded-full mx-auto" />
               <p className="font-body text-xs text-muted-foreground mt-1">Skåne Akvavit</p>
               <p className="font-display font-bold text-swedish-blue">"Skål!"</p>
             </motion.div>
