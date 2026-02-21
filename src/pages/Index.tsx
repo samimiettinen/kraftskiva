@@ -9,6 +9,7 @@ import RatingScreen from "@/components/game/RatingScreen";
 import DrinkScreen from "@/components/game/DrinkScreen";
 import ScoreboardScreen from "@/components/game/ScoreboardScreen";
 import GameOverScreen from "@/components/game/GameOverScreen";
+import MaxMartinEasterEgg from "@/components/game/MaxMartinEasterEgg";
 import { Volume2, VolumeX } from "lucide-react";
 
 const Index = () => {
@@ -171,16 +172,27 @@ const Index = () => {
         </div>
       );
 
-    case "gameover":
+    case "gameover": {
+      const isMaxMartin =
+        state.swedishPlayerName.toLowerCase() === "martin" &&
+        state.finnishPlayerName.toLowerCase() === "max";
       return (
         <div className="relative">
-          <GameOverScreen
-            swedishName={state.swedishPlayerName}
-            finnishName={state.finnishPlayerName}
-            swedishScore={state.swedishScore}
-            finnishScore={state.finnishScore}
-            onRestart={restartGame}
-          />
+          {isMaxMartin ? (
+            <MaxMartinEasterEgg
+              swedishScore={state.swedishScore}
+              finnishScore={state.finnishScore}
+              onRestart={restartGame}
+            />
+          ) : (
+            <GameOverScreen
+              swedishName={state.swedishPlayerName}
+              finnishName={state.finnishPlayerName}
+              swedishScore={state.swedishScore}
+              finnishScore={state.finnishScore}
+              onRestart={restartGame}
+            />
+          )}
           <button
             onClick={handleMuteToggle}
             className="fixed top-4 right-4 z-50 p-3 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
@@ -190,6 +202,7 @@ const Index = () => {
           </button>
         </div>
       );
+    }
 
     default:
       return (
