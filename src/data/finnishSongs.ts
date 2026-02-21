@@ -14,6 +14,22 @@ export const finnishSongs: Song[] = [
     ],
   },
   {
+    id: "fi-helan-gar-pk",
+    title: "Helan går",
+    melody: "Polyteknikkojen Kuoro",
+    spotifyTrackId: "6u9veBwvS0pcvbABXWwflw",
+    lyrics: [
+      "Helan går!",
+      "Sjung hopp faderallan lallan lej!",
+      "Helan går!",
+      "Sjung hopp faderallan lej!",
+      "Och den som inte helan tar,",
+      "han heller inte halvan får.",
+      "Helan gååår!",
+      "(Sjung hopp faderallan lej!)",
+    ],
+  },
+  {
     id: "fi-kokonaan",
     title: "Kokonaan!",
     melody: "Helan Går",
