@@ -10,6 +10,7 @@ interface SingingScreenProps {
   songsPlayed: number;
   totalRounds: number;
   onFinishSinging: () => void;
+  onCloseDeal?: () => void;
 }
 
 export default function SingingScreen({
@@ -19,6 +20,7 @@ export default function SingingScreen({
   songsPlayed,
   totalRounds,
   onFinishSinging,
+  onCloseDeal,
 }: SingingScreenProps) {
   const teamColor = currentTeam === "swedish" ? "text-swedish-blue" : "text-finnish-blue";
   const teamFlag = currentTeam === "swedish" ? "🇸🇪" : "🇫🇮";
@@ -81,7 +83,7 @@ export default function SingingScreen({
       </div>
 
       {/* Controls */}
-      <div className="p-6 text-center">
+      <div className="p-6 text-center space-y-3">
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -91,6 +93,16 @@ export default function SingingScreen({
         >
           ⭐ Rate Performance! ⭐
         </motion.button>
+        {onCloseDeal && songsPlayed >= 1 && (
+          <div>
+            <button
+              onClick={onCloseDeal}
+              className="font-body text-sm text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
+            >
+              🤝 Close the Deal — end battle now
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

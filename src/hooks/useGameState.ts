@@ -150,6 +150,10 @@ export function useGameState() {
     setState((prev) => ({ ...prev, phase: "welcome" }));
   }, []);
 
+  const closeDeal = useCallback(() => {
+    setState((prev) => ({ ...prev, phase: "gameover" }));
+  }, []);
+
   return {
     state,
     startGame,
@@ -160,5 +164,6 @@ export function useGameState() {
     goToRating,
     goToSetup,
     restartGame,
+    closeDeal,
   };
 }
