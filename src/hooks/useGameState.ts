@@ -22,7 +22,7 @@ export interface GameState {
   finnishPlayerName: string;
 }
 
-const TOTAL_ROUNDS = 8;
+const TOTAL_ROUNDS = 3;
 
 export function useGameState() {
   const [state, setState] = useState<GameState>({
