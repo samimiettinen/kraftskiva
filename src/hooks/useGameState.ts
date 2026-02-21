@@ -38,8 +38,8 @@ export function useGameState() {
     finnishSongIndex: 0,
     songsPlayed: 0,
     totalRounds: TOTAL_ROUNDS,
-    swedishPlayerName: "Erik",
-    finnishPlayerName: "Matti",
+    swedishPlayerName: "Hanna",
+    finnishPlayerName: "Max",
   });
 
   // Pick a song for a team: 90% own songs, 10% crossover
@@ -75,8 +75,8 @@ export function useGameState() {
       finnishSongQueue: fiQueue,
       swedishSongIndex: 0,
       finnishSongIndex: 0,
-      swedishPlayerName: swedishName || "Erik",
-      finnishPlayerName: finnishName || "Matti",
+      swedishPlayerName: swedishName || "Hanna",
+      finnishPlayerName: finnishName || "Max",
       swedishScore: 0,
       finnishScore: 0,
       songsPlayed: 0,

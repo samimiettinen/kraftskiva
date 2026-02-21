@@ -6,8 +6,8 @@ interface SetupScreenProps {
 }
 
 export default function SetupScreen({ onStart }: SetupScreenProps) {
-  const [swedishName, setSwedishName] = useState("Erik");
-  const [finnishName, setFinnishName] = useState("Matti");
+  const [swedishName, setSwedishName] = useState("Hanna");
+  const [finnishName, setFinnishName] = useState("Max");
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
