@@ -40,6 +40,23 @@ export const songs: Song[] = [
       "Nu tar vi den, nu tar vi den",
     ],
   },
+  {
+    id: "mera-brannvin",
+    title: "Mera brännvin i glasen",
+    melody: "Internationalen",
+    spotifyTrackId: "0CtcUIFujDsusQbu56J2Ks",
+    lyrics: [
+      "Mera brännvin i glasen,",
+      "mera glas på vårt bord,",
+      "mera bord på kalasen,",
+      "mer kalas på vår jord.",
+      "",
+      "Mera jordar kring månen,",
+      "mera månar kring Mars,",
+      "mera marscher till Skåne,",
+      "mera Skåne, bevars!",
+    ],
+  },
 ];
 
 export function getShuffledSongs(): Song[] {
