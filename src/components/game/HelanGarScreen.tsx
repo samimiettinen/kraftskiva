@@ -1,7 +1,7 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Song } from "@/data/songs";
-import { playGlassClink, playSongMelody, stopSongMelody, playDrumFill } from "@/lib/sounds";
+import { playGlassClink, playDrumFill } from "@/lib/sounds";
+import SpotifyPlayer from "./SpotifyPlayer";
 
 interface HelanGarScreenProps {
   song: Song;
@@ -9,10 +9,6 @@ interface HelanGarScreenProps {
 }
 
 export default function HelanGarScreen({ song, onFinish }: HelanGarScreenProps) {
-  useEffect(() => {
-    playSongMelody(song.melody);
-    return () => stopSongMelody();
-  }, [song.melody]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
@@ -50,6 +46,12 @@ export default function HelanGarScreen({ song, onFinish }: HelanGarScreenProps) 
             </motion.p>
           ))}
         </div>
+
+        {song.spotifyTrackId && (
+          <div className="mb-6">
+            <SpotifyPlayer trackId={song.spotifyTrackId} compact />
+          </div>
+        )}
 
         <motion.button
           initial={{ y: 20, opacity: 0 }}

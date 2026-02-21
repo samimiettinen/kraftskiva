@@ -5,12 +5,14 @@ export interface Song {
   lyrics: string[];
   isRefrain?: boolean;
   note?: string;
+  spotifyTrackId?: string;
 }
 
 export const helanGar: Song = {
   id: "helan-gar",
   title: "Helan Går",
   melody: "Traditionell",
+  spotifyTrackId: "4iCHGpSxJp0qOGbnGBaZkB",
   lyrics: [
     "Helan går!",
     "Sjung hopp faderallan lallan lej!",
@@ -29,6 +31,7 @@ export const songs: Song[] = [
     title: "ABC",
     melody: "ABC",
     isRefrain: true,
+    spotifyTrackId: "1xfzCvyA6Oix8Zgf73a94g",
     lyrics: [
       "ABC, i kudden jag drunknar.",
       "CDE, mitt huvud det dunkar.",
@@ -42,6 +45,7 @@ export const songs: Song[] = [
     id: "festen-i-mitt-hjarta",
     title: "Festen i mitt hjärta",
     melody: "Stockholm i mitt hjärta",
+    spotifyTrackId: "3lX3YrezCQgKL6liaLMoa9",
     lyrics: [
       "Festen i mitt hjärta,",
       "låt oss besjunga en skål.",
@@ -57,6 +61,7 @@ export const songs: Song[] = [
     id: "vara-vanner",
     title: "Våra vänner",
     melody: "Flickan hon går i ringen",
+    spotifyTrackId: "4EqcLbK24KbxzamidwOAVJ",
     lyrics: [
       "Vi skålar för våra vänner,",
       "och dom som vi känner,",
@@ -74,6 +79,7 @@ export const songs: Song[] = [
     melody: "Bara bada bastu",
     note: "Klang: Finlandssvensk",
     isRefrain: true,
+    spotifyTrackId: "3xFnHqGG8cFNwnkDhpLz4x",
     lyrics: [
       "Vi ska dricka nubbe, nubbe",
       "Hällon åpp och släpp all stress idag",
@@ -89,6 +95,7 @@ export const songs: Song[] = [
     title: "Genom snaps och dimma",
     melody: "Genom eld och vatten",
     isRefrain: true,
+    spotifyTrackId: "4TmH70IfapzLT6r8Dp4WVL",
     lyrics: [
       "Jag ska guida dig i berusat tillstånd",
       "Till en hemlig plats",
@@ -105,6 +112,7 @@ export const songs: Song[] = [
     id: "kraftor-kraver",
     title: "Kräftor kräver ju små nubbar",
     melody: "Räven raskar över isen",
+    spotifyTrackId: "72jZXiSONVFHG0ou8ItT2a",
     lyrics: [
       "Kräftor kräver ju små nubbar,",
       "Kräftor kräver ju små nubbar.",
@@ -120,6 +128,7 @@ export const songs: Song[] = [
     id: "sma-kraftorna",
     title: "Små kräftorna",
     melody: "Små grodorna",
+    spotifyTrackId: "6xIU6Cso5FitiBmlTxUvUW",
     lyrics: [
       "Små kräftorna, små kräftorna är tråkiga att se,",
       "Ej öron, ej nypor ej, ej rumpor hava de.",
@@ -131,6 +140,7 @@ export const songs: Song[] = [
     id: "kraftan",
     title: "Kräftan",
     melody: "Jänta å ja",
+    spotifyTrackId: "3ScJjOGNAiXIWejsaB0MKi",
     lyrics: [
       "Kräftan och jag, kräftan och jag,",
       "vi trivs så bra tillsammans, hon och jag.",
@@ -146,6 +156,7 @@ export const songs: Song[] = [
     id: "supen-den-rinner",
     title: "Supen den rinner",
     melody: "Mors lilla Olle",
+    spotifyTrackId: "54AlF8UO9hpIGT53jwqh3V",
     lyrics: [
       "Supen den rinner längs strupen fram,",
       "den värmer och gör att det fest blir med glam,",
@@ -158,6 +169,7 @@ export const songs: Song[] = [
     id: "droppar-faller",
     title: "Droppar faller lätt",
     melody: "Bä, bä vita lamm",
+    spotifyTrackId: "3XQAA0vK8a4pRrBPj5h6TT",
     lyrics: [
       "Droppar faller lätt",
       "uti kräftans dar.",
@@ -172,6 +184,7 @@ export const songs: Song[] = [
     id: "ta-en-sup",
     title: "Ta en sup",
     melody: "Tänd ett ljus",
+    spotifyTrackId: "0vBbC9uR7kbqbYSoKb5l6k",
     lyrics: [
       "Ta en sup och låt det bränna",
       "låt aldrig halsen få känna, det är svalt nu",
@@ -185,6 +198,7 @@ export const songs: Song[] = [
     id: "dillprydda-berg",
     title: "Dillprydda berg",
     melody: "Vi går över daggstänkta berg",
+    spotifyTrackId: "0ASo7WdwkmBXTLtjpr79PN",
     lyrics: [
       "Vi går mot de dillprydda berg, fallera,",
       "som lånat av rubinerna sin färg, fallera!",
@@ -196,6 +210,7 @@ export const songs: Song[] = [
     id: "lille-sup",
     title: "Lille sup",
     melody: "Lille katt",
+    spotifyTrackId: "5FVsOvp9lH0qwcVXjDBzWS",
     lyrics: [
       "Lille sup, lille sup,",
       "lille söte supen",
@@ -207,6 +222,7 @@ export const songs: Song[] = [
     id: "krafta-med-dill",
     title: "Kräfta med dill",
     melody: "Blinka lilla stjärna",
+    spotifyTrackId: "6Nnc8U7EFgRTOzo0JFSS49",
     lyrics: [
       "Kräfta, kräfta prydd med dill,",
       "och en immig sup därtill,",
@@ -220,6 +236,7 @@ export const songs: Song[] = [
     id: "uppaa-kraftkalaset",
     title: "Uppå kräftkalaset",
     melody: "Uppå källarbacken",
+    spotifyTrackId: "2kbrC84KRIsXVjkDYPhKZg",
     lyrics: [
       "Uppå kräftkalaset, uppå kräftkalaset",
       "där må ni tro",

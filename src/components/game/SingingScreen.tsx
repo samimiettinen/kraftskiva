@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Song } from "@/data/songs";
 import { Team } from "@/hooks/useGameState";
-import { playClick, playSongMelody, stopSongMelody } from "@/lib/sounds";
+import { playClick } from "@/lib/sounds";
+import SpotifyPlayer from "./SpotifyPlayer";
 
 interface SingingScreenProps {
   song: Song;
@@ -45,16 +46,9 @@ export default function SingingScreen({
 
   const startKaraoke = () => {
     playClick();
-    playSongMelody(song.melody);
     setIsPlaying(true);
     setCurrentLine(0);
   };
-
-  // Stop melody when finished or unmounted
-  useEffect(() => {
-    if (isFinished) stopSongMelody();
-    return () => stopSongMelody();
-  }, [isFinished]);
 
   return (
     <div className={`min-h-screen flex flex-col bg-gradient-to-b ${teamBg} bg-background`}>
@@ -86,6 +80,11 @@ export default function SingingScreen({
           <span className="inline-block mt-2 font-body text-xs bg-accent text-accent-foreground px-3 py-1 rounded-full">
             Refräng
           </span>
+        )}
+        {song.spotifyTrackId && (
+          <div className="mt-4 px-2">
+            <SpotifyPlayer trackId={song.spotifyTrackId} compact />
+          </div>
         )}
       </motion.div>
 
