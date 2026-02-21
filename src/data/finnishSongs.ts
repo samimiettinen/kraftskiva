@@ -7,9 +7,8 @@ export const finnishSongs: Song[] = [
     melody: "Jaakko kulta (kaanon)",
     spotifyTrackId: "4HBAoSScGiUz18KtGaUIUF",
     lyrics: [
-      "Lapin Kulta, Lapin Kulta,",
-      "Karjala, Karjala,",
-      "Sininen ja Olvi, Sininen ja Olvi,",
+      "Lapin Kulta, Lapin Kulta, Karjala, Karjala,",
+      "Sininen ja Karhu, Sininen ja Karhu,",
       "Koff, Koff, Koff, Koff, Koff, Koff.",
     ],
   },
