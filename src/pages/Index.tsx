@@ -22,6 +22,7 @@ const Index = () => {
     goToRating,
     goToSetup,
     restartGame,
+    closeDeal,
   } = useGameState();
 
   const { isMuted, toggleMute } = useAudioState();
@@ -89,6 +90,7 @@ const Index = () => {
             songsPlayed={state.songsPlayed}
             totalRounds={state.totalRounds}
             onFinishSinging={goToRating}
+            onCloseDeal={closeDeal}
           />
           <button
             onClick={handleMuteToggle}
