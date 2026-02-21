@@ -61,8 +61,7 @@ const Index = () => {
         </div>
       );
 
-    case "helan-swedish":
-    case "helan-finnish":
+    case "helan":
       return state.currentSong ? (
         <div className="relative">
           <HelanGarScreen song={state.currentSong} onFinish={finishHelan} />

@@ -12,7 +12,7 @@ export const helanGar: Song = {
   id: "helan-gar",
   title: "Helan Går",
   melody: "Traditionell",
-  spotifyTrackId: "4iCHGpSxJp0qOGbnGBaZkB",
+  spotifyTrackId: "6u9veBwvS0pcvbABXWwflw",
   lyrics: [
     "Helan går!",
     "Sjung hopp faderallan lallan lej!",

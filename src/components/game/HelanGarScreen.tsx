@@ -29,8 +29,11 @@ export default function HelanGarScreen({ song, onFinish }: HelanGarScreenProps) 
         <h1 className="font-display text-5xl font-bold text-primary text-cartoon-shadow mb-2">
           {song.title}
         </h1>
-        <p className="font-body text-muted-foreground mb-6">
-          🎵 Everyone sings together! 🎵
+        <p className="font-body text-muted-foreground mb-2">
+          🇸🇪🇫🇮 Everyone sings together! 🇫🇮🇸🇪
+        </p>
+        <p className="font-body text-sm text-primary font-bold mb-6">
+          ⭐ 5 points for both teams! ⭐
         </p>
 
         <div className="bg-card cartoon-border p-6 mb-8">
