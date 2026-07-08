@@ -3,10 +3,11 @@ import { Song } from "./songs";
 // Suomenkieliset snapsi- ja juomalaulut rapujuhliin, koottu kanonisista
 // teekkarilaulukirjoista (Laulutunkki/Athene, Tietokillan laulukirja,
 // TKY:n Teekkarilauluja, Asteriskin e-laulukirja) sekä rapujuhla-
-// perinteestä (mm. Rapukuningas, Kotiliesi, K-Ruoka). Mukana vain
-// perinteisiä tai anonyymejä sanoituksia — tekijänoikeuden alaiset
-// klassikot (Hectorin "Juodaan viinaa", Godzinskyn "Rapulaulu",
-// "Hyvät ystävät", "Eino Leinon juomalaulu") on jätetty pois.
+// perinteestä (mm. Rapukuningas, Kotiliesi, K-Ruoka). Perinteisten ja
+// anonyymien laulujen sanat ovat mukana kokonaan; tekijänoikeuden
+// alaiset klassikot (mm. Hectorin "Juodaan viinaa", Godzinskyn
+// "Rapulaulu") ovat mukana levyltä-laulettavina numeroina, joissa
+// näytetään vain alkusäe — musiikki soi virallisena Spotify-raitana.
 // spotifyTrackId osoittaa laulun omaan levytykseen tai sävelmälähteen
 // tunnettuun levytykseen.
 export const finnishSongs: Song[] = [
@@ -423,6 +424,96 @@ export const finnishSongs: Song[] = [
       "Viini laseissa ilkkuen päilyy,",
       "meitä kutsuen kuohullaan.",
       "(CHA, CHA, CHAA!)",
+    ],
+  },
+  {
+    id: "fi-rapulaulu",
+    title: "Rapulaulu",
+    melody: "Ukko Nooa",
+    spotifyTrackId: "3Bt80PkgBEIxgD9FyRd5D6",
+    note: "Sanat: George de Godzinsky — rapujuhlien tunnuslaulu",
+    lyrics: [
+      "Rapu tuli, rapu tuli, nyt on elokuu...",
+      "",
+      "♪ Loput sanat ovat tekijänoikeuden suojaamia —",
+      "laula mukana Ukko Nooan sävelellä! ♪",
+    ],
+  },
+  {
+    id: "fi-juodaan-viinaa",
+    title: "Juodaan viinaa",
+    melody: "Juodaan viinaa (Hector)",
+    spotifyTrackId: "65Q310MfOf1kAJPZfR4ioQ",
+    note: "Sanat ja sävel: Hector — sitsien iskelmäklassikko",
+    lyrics: [
+      "♪ Sanat ovat tekijänoikeuden suojaamia —",
+      "kuuntele levyä ja laula mukana,",
+      "kertosäkeen osaa jokainen! ♪",
+    ],
+  },
+  {
+    id: "fi-hyvat-ystavat",
+    title: "Hyvät ystävät",
+    melody: "Mozart: Figaron häät (Non più andrai)",
+    spotifyTrackId: "4f9DQ3YTIaxD1wg0sGfC2w",
+    note: "Sanat: Hakanpää & Puonti — akateeminen kunnialaulu",
+    lyrics: [
+      "Hyvät ystävät, juhla voi alkaa,",
+      "sankarille me nostamme maljaa...",
+      "",
+      "♪ Loput sanat ovat tekijänoikeuden suojaamia —",
+      "laula mukana levyn tahtiin! ♪",
+    ],
+  },
+  {
+    id: "fi-eino-leinon-juomalaulu",
+    title: "Eino Leinon juomalaulu",
+    melody: "Trad.",
+    spotifyTrackId: "2HCY7Qq185lKNUm5zwbS4V",
+    note: "Sanat: Heikki Asunta 1929 — Polyteknikkojen Kuoron levytys",
+    lyrics: [
+      "Monta päivää juotuaan pessimisti tuskissaan...",
+      "",
+      "♪ Loput sanat ovat tekijänoikeuden suojaamia —",
+      "laulu päättyy kuuluisaan maljaan:",
+      "\"Veljet — asiaan!\" ♪",
+    ],
+  },
+  {
+    id: "fi-falstaffin-juomalaulu",
+    title: "Falstaffin juomalaulu",
+    melody: "Otto Nicolai: Windsorin iloiset rouvat",
+    spotifyTrackId: "5ln0Oqsexp5lEEgQ8SphMk",
+    note: "Suom. sanat: Heikki Puukko — Polyteknikkojen Kuoron klassikko",
+    lyrics: [
+      "Jo äidinmaidosta maksaani, huh-hei,",
+      "janon himoisen sain...",
+      "",
+      "♪ Loput sanat ovat tekijänoikeuden suojaamia —",
+      "laula mukana levyn tahtiin! ♪",
+    ],
+  },
+  {
+    id: "fi-vanhojapoikia",
+    title: "Vanhojapoikia viiksekkäitä",
+    melody: "Vanhojapoikia viiksekkäitä (Juha Vainio)",
+    spotifyTrackId: "5wbc8Er1u43jkSNEkuuOnk",
+    note: "Sanat ja sävel: Juha Vainio — laula mukana levyltä",
+    lyrics: [
+      "♪ Sanat ovat tekijänoikeuden suojaamia —",
+      "kuuntele levyä ja laula mukana,",
+      "kertosäkeen osaa jokainen! ♪",
+    ],
+  },
+  {
+    id: "fi-rosvo-roope",
+    title: "Rosvo-Roope",
+    melody: "Rosvo-Roope (iskelmäklassikko)",
+    spotifyTrackId: "7lmfvfFXQGsKF1ZcoIJkbM",
+    note: "Tapio Rautavaaran levytys — laula mukana levyltä",
+    lyrics: [
+      "♪ Sanat ovat tekijänoikeuden suojaamia —",
+      "kuuntele levyä ja laula mukana! ♪",
     ],
   },
   {
