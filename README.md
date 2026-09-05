@@ -33,7 +33,7 @@ Npm-lukituksesta puuttuneet vertaisriippuvuudet on täydennetty, jotta `npm ci` 
 
 Uudistus tehdään haaralla `codex/laulukirja`. Älä yhdistä päähaaraan kesken Lovable-muutosten. Tarkista ensin päähaaran uudet muutokset ja yhdistä ne tällä haaralla. Sovelluksen Vite-rakennetta, Lovable-taggeria tai päähaaran kytkentää ei ole muutettu.
 
-`.openai/hosting.json` kohdistaa erilliseen Sites-versioon. Se ei muuta Lovablen julkaisua. Sites-versio on aluksi vain omistajan käytössä. Julkinen vieraskäyttö edellyttää erillistä jakamista/julkaisua.
+`.openai/hosting.json` kohdistaa DCM Capital Oy:n työtilassa luotuun Sites-versioon: https://kraftskiva-dcm.sami-miettin-6218.chatgpt.site. Se ei muuta Lovablen julkaisua. Sites-versio on aluksi vain omistajan käytössä. Julkinen vieraskäyttö edellyttää erillistä jakamista/julkaisua.
 
 ## Tarkistukset
 
