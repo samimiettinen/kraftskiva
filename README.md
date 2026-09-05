@@ -4,12 +4,16 @@ Rapujuhlien mobiiliin mukautuva laulukirja suomeksi ja ruotsiksi. React, TypeScr
 
 ## Käyttö
 
-- `/`: 10 laulun sanat, melodian mukaan muodostettu Spotify-haku, kielisuodattimet, sanahaku ja suosikit.
+- `/`: 40 lauluversion sanat, melodian mukaan muodostettu Spotify-haku, kielisuodattimet, sanahaku ja suosikit.
 - Pöytähaasteet: kolme yhteislauluhaastetta ja linkki alkuperäiseen maaotteluun.
 - Illan saldo: 10 pistettä eri laulusta, 20 eri haasteesta. 40 pisteellä Laulava teekkari, 100 pisteellä Raputohtori.
 - `/maaottelu`: repon alkuperäinen Suomi–Ruotsi-peli.
 
 Pisteet ja suosikit tallentuvat selaimen localStorageen (`kraftskiva-book-v1`). Pöydän yhteiseen pistepeliin käytetään yhtä laitetta; laitteiden välistä synkronointia ei ole. Uusi ilta nollaa pisteet vahvistuksen jälkeen ja säilyttää suosikit. Tallennuksen estyminen ei estä pelaamista.
+
+## HNKK-lauluvihkon laajennus
+
+Käyttäjän toimittaman HNKK_Lauluvihko.pdf:n 30 laulua on lisätty omalla HNKK-suodattimella. Helan går, Internationalen ja Olutkaanon on merkitty rinnakkaisversioiksi. Lähdesivu ja laulunumero näkyvät kunkin laulun yhteydessä. Kaksikieliset laulut löytyvät molemmista kielisuodattimista. Puuttuvaa tai epätarkkaa säveltä ei arvata: Spotify-haku käyttää silloin laulun nimeä. PDF:n sanoitukset ja kertausmerkit on säilytetty.
 
 ## Laulut ja Spotify
 

@@ -71,8 +71,9 @@ export default function Index() {
   const filtered = bookSongs.filter(
     (s) =>
       (filter === "Kaikki" ||
-        (filter === "Suomeksi" && s.language === "fi") ||
-        (filter === "Ruotsiksi" && s.language === "sv") ||
+        (filter === "HNKK" && s.collection === "HNKK") ||
+        (filter === "Suomeksi" && s.language.includes("fi")) ||
+        (filter === "Ruotsiksi" && s.language.includes("sv")) ||
         (filter === "Suosikit" && progress.favorites.includes(s.id)) ||
         s.category === filter) &&
       `${s.title} ${s.melody} ${s.lyrics.join(" ")}`
@@ -223,6 +224,7 @@ export default function Index() {
                     "Ruotsiksi",
                     "Teekkarit",
                     "Suosikit",
+                    "HNKK",
                   ].map((f) => (
                     <button
                       key={f}
@@ -507,7 +509,7 @@ export default function Index() {
                 <span className="eyebrow">
                   LAULU{" "}
                   {String(bookSongs.indexOf(selected) + 1).padStart(2, "0")} ·{" "}
-                  {selected.language === "fi" ? "SUOMEKSI" : "PÅ SVENSKA"}
+                  {selected.language === "fi-sv" ? "SUOMEKSI / PÅ SVENSKA" : selected.language === "fi" ? "SUOMEKSI" : "PÅ SVENSKA"}
                 </span>
                 <button
                   className="text-button"
@@ -527,15 +529,15 @@ export default function Index() {
                 rel="noopener noreferrer"
               >
                 <Music2 size={18} />
-                Etsi melodia Spotifysta
+                {selected.melodyUncertain ? "Etsi laulu Spotifysta" : "Etsi melodia Spotifysta"}
                 <ExternalLink size={16} />
               </a>
               <p className="spotify-note">
-                Avaa sävelen haku Spotifyssa ja valitse sopiva esitys.
+                {selected.melodyUncertain ? "Vihkossa ei ole tarkkaa sävelmerkintää. Haku käyttää laulun nimeä." : "Avaa sävelen haku Spotifyssa ja valitse sopiva esitys."}
               </p>
               <div
                 className={`lyrics ${large ? "large-lyrics" : ""}`}
-                lang={selected.language}
+                lang={selected.language === "fi-sv" ? undefined : selected.language}
               >
                 {selected.lyrics.map((line, i) =>
                   line ? <p key={i}>{line}</p> : <br key={i} />,

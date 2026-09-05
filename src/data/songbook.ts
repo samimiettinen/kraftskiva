@@ -1,7 +1,11 @@
 import { helanGar, songs, type Song } from "./songs";
+import { hnkkSongs } from "./hnkkSongs";
 import { finnishSongs } from "./finnishSongs";
 export type BookSong = Song & {
-  language: "fi" | "sv";
+  language: "fi" | "sv" | "fi-sv";
+  collection?: "HNKK";
+  spotifyQuery?: string;
+  melodyUncertain?: boolean;
   category: "Klassikot" | "Teekkarit" | "Pitkän kaavan";
   source: string;
 };
@@ -86,12 +90,13 @@ export const bookSongs: BookSong[] = [
         : ("Klassikot" as const),
     source: "Alkuperäisen repon sanoitus.",
   })),
+  ...hnkkSongs,
 ];
-export function spotifySearch(song: Song) {
-  const query =
+export function spotifySearch(song: Song & { spotifyQuery?: string }) {
+  const query = song.spotifyQuery ?? (
     song.melody === "Traditionell"
       ? song.title
-      : song.melody.replace(/\s*\(.*\)/, "");
+      : song.melody.replace(/\s*\(.*\)/, ""));
   return `https://open.spotify.com/search/${encodeURIComponent(query)}`;
 }
 export const challenges = [

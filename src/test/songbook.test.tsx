@@ -90,3 +90,23 @@ describe("songbook", () => {
     });
   });
 });
+
+describe('HNKK songbook import', () => {
+  it('includes all thirty songs and joins column and page continuations', () => {
+    const imported = bookSongs.filter(s => s.collection === 'HNKK');
+    expect(imported).toHaveLength(30);
+    expect(new Set(bookSongs.map(s => s.id)).size).toBe(bookSongs.length);
+    expect(imported.find(s => s.id === 'hnkk-jos-avecisi-kieltaa')?.lyrics).toContain('Maisterit koulussa opettaa,');
+    expect(imported.find(s => s.id === 'hnkk-snapsin-kaveri')?.lyrics).toContain('känni silloin suojelee.');
+    expect(imported.find(s => s.id === 'hnkk-sorkan-sallit')?.lyrics).toContain('basga haisee, balalaikka soi. :;:');
+  });
+  it('finds bilingual HNKK lyrics through the Swedish filter and uses honest fallback searches', () => {
+    mount();
+    fireEvent.click(screen.getByRole('button', {name: 'Ruotsiksi'}));
+    fireEvent.change(screen.getByRole('textbox', {name: 'Etsi laulua'}), {target: {value: 'Aqua vera'}});
+    expect(screen.getByRole('button', {name: /Aqua vera Terve teille lintuset/})).toBeInTheDocument();
+    const unknown = bookSongs.find(s => s.id === 'hnkk-yksijalkainen')!;
+    expect(unknown.melodyUncertain).toBe(true);
+    expect(decodeURIComponent(spotifySearch(unknown))).toContain('Yksijalkainen');
+  });
+});
