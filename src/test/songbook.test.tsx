@@ -6,6 +6,7 @@ import { bookSongs, readProgress, spotifySearch } from "@/data/songbook";
 
 beforeEach(() => {
   cleanup();
+  vi.spyOn(window, "scrollTo").mockImplementation(() => {});
   const data = new Map<string, string>();
   vi.stubGlobal("localStorage", {
     getItem: (key: string) => data.get(key) ?? null,

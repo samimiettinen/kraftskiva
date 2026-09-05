@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -40,6 +40,8 @@ import {
   spotifySearch,
   type BookSong,
 } from "@/data/songbook";
+import Karaoke from "@/components/songbook/Karaoke";
+import { displayRepeats } from "@/lib/verses";
 import hero from "@/assets/rapujuhla-hero.jpg";
 import "./songbook.css";
 
@@ -48,8 +50,15 @@ export default function Index() {
   const [view, setView] = useState<View>("book");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("Kaikki");
-  const [selected, setSelected] = useState<BookSong | null>(null);
+  const [selected, updateSelected] = useState<BookSong | null>(null);
+  function setSelected(song: BookSong | null) {
+    if (song && !selected) previousFocus.current = document.activeElement as HTMLElement;
+    updateSelected(song);
+  }
   const [progress, setProgress] = useState(readProgress);
+  const [karaoke, setKaraoke] = useState(false);
+  const previousFocus = useRef<HTMLElement | null>(null);
+  useEffect(() => { setKaraoke(false); }, [selected?.id]);
   const [large, setLarge] = useState(false);
   const [notice, setNotice] = useState("");
   useEffect(() => {
@@ -94,7 +103,9 @@ export default function Index() {
     );
   }
   function randomSong() {
-    const pool = filtered.length ? filtered : bookSongs;
+    const candidates = filtered.length ? filtered : bookSongs;
+    const unplayed = candidates.filter(s => !progress.sung.includes(s.id));
+    const pool = unplayed.length ? unplayed : candidates;
     setSelected(pool[Math.floor(Math.random() * pool.length)]);
   }
   return (
@@ -118,7 +129,7 @@ export default function Index() {
               key={key}
               className={view === key ? "nav-active" : ""}
               aria-current={view === key ? "page" : undefined}
-              onClick={() => setView(key)}
+              onClick={() => { setView(key); window.scrollTo({ top: 0, behavior: "instant" }); }}
             >
               <Icon size={17} />
               <span>{label}</span>
@@ -130,7 +141,7 @@ export default function Index() {
           {points} p
         </span>
       </header>
-      <main id="book-content">
+      <main id="book-content" tabIndex={-1}>
         <section className="book-intro">
           <div>
             <p className="eyebrow">RAPUJA. LAULUJA. PIENI PILKE.</p>
@@ -156,6 +167,7 @@ export default function Index() {
                   ? "Kolme pientä haastetta koko seurueelle. Suoritus hyväksytään yhteisellä, sopivan epätieteellisellä päätöksellä."
                   : "Jokainen yhdessä laulettu laulu on pieni voitto. Tässä teidän pöytänne saavutukset."}
             </p>
+            {view === "book" && <button className="red-button primary-draw" onClick={randomSong}><Shuffle size={22}/>Arvo seuraava laulu<ArrowRight size={20}/></button>}
           </div>
           <div className="intro-seal">
             <span>RAPUJUHLAT</span>
@@ -502,7 +514,7 @@ export default function Index() {
           if (!open) setSelected(null);
         }}
       >
-        <DialogContent className="song-dialog">
+        <DialogContent className={`song-dialog ${karaoke ? "karaoke-dialog" : ""}`} onCloseAutoFocus={e => { e.preventDefault(); previousFocus.current?.focus(); }}>
           {selected && (
             <>
               <div className="song-dialog-top">
@@ -522,6 +534,7 @@ export default function Index() {
               </div>
               <DialogTitle>{selected.title}</DialogTitle>
               <DialogDescription>Sävel: {selected.melody}</DialogDescription>
+              <button className="text-button karaoke-toggle" aria-pressed={karaoke} onClick={() => setKaraoke(v => !v)}>{karaoke ? "Näytä kaikki sanat" : "Karaoke – säkeistö kerrallaan"}</button>
               <a
                 className="spotify-link"
                 href={spotifySearch(selected)}
@@ -535,14 +548,15 @@ export default function Index() {
               <p className="spotify-note">
                 {selected.melodyUncertain ? "Vihkossa ei ole tarkkaa sävelmerkintää. Haku käyttää laulun nimeä." : "Avaa sävelen haku Spotifyssa ja valitse sopiva esitys."}
               </p>
-              <div
+              {karaoke ? <Karaoke key={selected.id} song={selected}/> : <div
                 className={`lyrics ${large ? "large-lyrics" : ""}`}
                 lang={selected.language === "fi-sv" ? undefined : selected.language}
               >
-                {selected.lyrics.map((line, i) =>
+                {displayRepeats(selected.lyrics).map((line, i) =>
                   line ? <p key={i}>{line}</p> : <br key={i} />,
                 )}
-              </div>
+              </div>}
+              {selected.lyrics.some(line => /:[,;]:|;:/.test(line)) && <p className="source-note">|: … :| = laula merkitty kohta kahdesti.</p>}
               {selected.note && (
                 <p className="singing-note">
                   <Sparkles size={16} />

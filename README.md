@@ -42,3 +42,9 @@ Uudistus tehdään haaralla `codex/laulukirja`. Älä yhdistä päähaaraan kesk
 ## Tarkistukset
 
 Uuden laulukirjan testit kattavat sanoilla hakemisen, melodian hakulinkin, pisteiden kertakirjauksen ja säilymisen, vahvistetun nollauksen sekä rikkoutuneen tallennustiedon käsittelyn. Koko repon lintissä on ennestään viisi virhettä tiedostoissa `command.tsx`, `textarea.tsx`, `sounds.ts` ja `tailwind.config.ts`; niitä ei muuteta osana laulukirjaa. Riippuvuusasennuksen audit raportoi myös olemassa olevan riippuvuuskannan haavoittuvuuksia; niitä ei automaattisesti päivitetä tässä ominaisuusmuutoksessa.
+
+## Pöytäkäyttö ja jakaminen
+
+Etusivun arvonta suosii nykyisen suodatuksen laulamattomia lauluja. Mobiilissa navigaatio on pysyvästi alareunassa. Karaoke näyttää lähteen säkeistöt yksi kerrallaan ja yrittää pitää näytön hereillä tuetuissa selaimissa; tila ei ole synkronoitu Spotify-toistoon. Hereilläpidon epäonnistuminen näkyy käyttäjälle.
+
+Sisältömuutokset ja tarkistuksen rajat: `docs/sisaltotarkistus.md`. Julkista jakelua varten puuttuvat oikeusselvitykset: `docs/julkaisuluvat.md`. Näkyvyys tarkistetaan palvelusta ennen julkaisua. OG-kuva: `public/og-kraftskiva.jpg`; yksityisyys voi estää LinkedIn-esikatselun automaattisen haun.

@@ -69,7 +69,7 @@ export const hnkkSongs: BookSong[] = [
     "melody": "Ei sävelmerkintää vihkossa",
     "lyrics": [
       "Ranskassa juodaan viiniä,",
-      "Saksalla olutta, Venäjällä vodkaa,",
+      "Saksassa olutta, Venäjällä vodkaa,",
       "Suomessa juodaan kaikkea,",
       "siis malja sille nostakaa!",
       "",
@@ -375,7 +375,7 @@ export const hnkkSongs: BookSong[] = [
       "On pieniä käärmeitä,",
       "helvetin pieniä käärmeitä.",
       "Kun ne pannaan samaan pussiin,",
-      "siellä ne saava rauhassa",
+      "siellä ne saavat rauhassa",
       "- ja taas on pieniä käärmeitä.",
       "",
       "On pieniä kiviä,",
@@ -407,7 +407,7 @@ export const hnkkSongs: BookSong[] = [
   },
   {
     "id": "hnkk-punchen-kommer",
-    "title": "Punchen kommer",
+    "title": "Punschen kommer",
     "language": "sv",
     "category": "Klassikot",
     "collection": "HNKK",
@@ -420,7 +420,7 @@ export const hnkkSongs: BookSong[] = [
       "Skål för glada minnen! Skål för varje vår!",
       "Inga sorger finnes mer, när punsch vi får."
     ],
-    "spotifyQuery": "Punchen kommer",
+    "spotifyQuery": "Punschen kommer",
     "melodyUncertain": true
   },
   {
@@ -539,7 +539,7 @@ export const hnkkSongs: BookSong[] = [
       "Oon vain köyhä kolhoosinainen,",
       "ei oo mulla yhtään ystävää.",
       ":;: Ei ole lehmää eikä ole lammasta,",
-      "eikä suussa yhtään hammasta.” :;:",
+      "eikä suussa yhtään hammasta. :;:",
       "",
       "Siperian lakeus on suuri,",
       "Sonja siellä lunta lapioi.",
@@ -588,12 +588,12 @@ export const hnkkSongs: BookSong[] = [
     "melody": "Suomen laulu",
     "lyrics": [
       "Kuule kuinka lehmä ammuu,",
-      "Väinäöinenkin jo sammuu.",
+      "Väinämöinenkin jo sammuu.",
       "Laulu vodkan on, laulu vodkan on!",
       "",
       "Kuumaa vettä, sokeria,",
       "siihen vähän konjakkia.",
-      "Sen on totia, se on totia!",
+      "Se on totia, se on totia!",
       "",
       "Kun on saanut vähän viinaa,",
       "tekee mieli saada lisää.",
