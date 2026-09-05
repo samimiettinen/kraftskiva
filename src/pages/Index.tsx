@@ -40,6 +40,7 @@ import {
   spotifySearch,
   type BookSong,
 } from "@/data/songbook";
+import Responsibility from "@/components/songbook/Responsibility";
 import Karaoke from "@/components/songbook/Karaoke";
 import { displayRepeats } from "@/lib/verses";
 import hero from "@/assets/rapujuhla-hero.jpg";
@@ -237,6 +238,7 @@ export default function Index() {
                     "Teekkarit",
                     "Suosikit",
                     "HNKK",
+                    "Nuorkauppakamarien omat",
                   ].map((f) => (
                     <button
                       key={f}
@@ -259,7 +261,7 @@ export default function Index() {
                           {String(bookSongs.indexOf(song) + 1).padStart(2, "0")}
                         </span>
                         <span className="song-summary">
-                          <strong>{song.title}</strong>
+                          <strong>{song.title}{song.award && <span className="award-icon" role="img" aria-label={song.award} title={song.award}>🏅</span>}</strong>
                           <span>
                             <Music2 size={13} />
                             {song.melody}
@@ -497,6 +499,7 @@ export default function Index() {
             </section>
           </aside>
         </div>
+        <Responsibility/>
         <footer className="book-footer">
           <span className="footer-brand">Kräftskiva</span>
           <span>Teekkarin tarkkuudella. Pöytäseuran armoilla.</span>
@@ -533,6 +536,8 @@ export default function Index() {
                 </button>
               </div>
               <DialogTitle>{selected.title}</DialogTitle>
+              {selected.award && <p className="song-award"><span aria-hidden="true">🏅</span> {selected.award}</p>}
+              <p className="song-category">{selected.category}</p>
               <DialogDescription>Sävel: {selected.melody}</DialogDescription>
               <button className="text-button karaoke-toggle" aria-pressed={karaoke} onClick={() => setKaraoke(v => !v)}>{karaoke ? "Näytä kaikki sanat" : "Karaoke – säkeistö kerrallaan"}</button>
               <a

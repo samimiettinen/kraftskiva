@@ -6,7 +6,8 @@ export type BookSong = Song & {
   collection?: "HNKK";
   spotifyQuery?: string;
   melodyUncertain?: boolean;
-  category: "Klassikot" | "Teekkarit" | "Pitkän kaavan";
+  category: "Klassikot" | "Teekkarit" | "Pitkän kaavan" | "Nuorkauppakamarien omat";
+  award?: string;
   source: string;
 };
 const originalSongs: BookSong[] = [
@@ -91,6 +92,29 @@ export const bookSongs: BookSong[] = [
     source: "Alkuperäisen repon sanoitus.",
   })),
   ...hnkkSongs,
+{
+  "id": "rapumaan-marssi",
+  "title": "Rapumaan marssi",
+  "melody": "Vaasan marssi",
+  "language": "fi",
+  "category": "Nuorkauppakamarien omat",
+  "award": "Kunniamaininta isänmaallisimmasta rapulaulusta",
+  "source": "Kirjoitettu pääkaupunkiseudun nuorkauppakamarien rapujuhlissa 2024. Kunniamaininta isänmaallisimmasta rapulaulusta.",
+  "lyrics": [
+    "Miss laaja aukee rapumaa",
+    "Siel kaksin kerroin kiskotaan",
+    "Me siellä keskellä viinojen",
+    "Kai humallumme kuin juopot sen.",
+    "",
+    "Ei meitä sää voi säikyttää",
+    "Ei muistamaan saa nauhatkaan",
+    "Ei muistamaan saa nauhatkaan",
+    "Ei puute, kurjuus alkoonkaan",
+    "",
+    "Ei muistamaan saa nauhatkaan",
+    "Ei puute, kurjuus alkoonkaan"
+  ]
+},
 ];
 export function spotifySearch(song: Song & { spotifyQuery?: string }) {
   const query = song.spotifyQuery ?? (

@@ -111,3 +111,33 @@ describe('HNKK songbook import', () => {
     expect(decodeURIComponent(spotifySearch(unknown))).toContain('Yksijalkainen');
   });
 });
+
+describe("Rapumaan marssi", () => {
+  it("preserves Veera's words exactly and opens the song from search", () => {
+    const song = bookSongs.find(s => s.id === "rapumaan-marssi")!;
+    expect(song.lyrics.join("\n")).toBe(`Miss laaja aukee rapumaa
+Siel kaksin kerroin kiskotaan
+Me siellä keskellä viinojen
+Kai humallumme kuin juopot sen.
+
+Ei meitä sää voi säikyttää
+Ei muistamaan saa nauhatkaan
+Ei muistamaan saa nauhatkaan
+Ei puute, kurjuus alkoonkaan
+
+Ei muistamaan saa nauhatkaan
+Ei puute, kurjuus alkoonkaan`);
+    mount();
+    fireEvent.change(screen.getByRole("textbox", {name:"Etsi laulua"}),{target:{value:"Rapumaan marssi"}});
+    fireEvent.click(screen.getByRole("button", {name:/41 Rapumaan marssi/}));
+    expect(screen.getByRole("heading", {name:"Rapumaan marssi"})).toBeInTheDocument();
+    expect(screen.getByRole("link", {name:"Etsi melodia Spotifysta"})).toHaveAttribute("href","https://open.spotify.com/search/Vaasan%20marssi");
+  });
+  it("includes the new song in random selection without a filter", () => {
+    vi.spyOn(Math,"random").mockReturnValue(0.999999);
+    mount();
+    fireEvent.click(screen.getByRole("button",{name:"Arvo seuraava laulu"}));
+    expect(screen.getByRole("heading",{name:"Rapumaan marssi"})).toBeInTheDocument();
+    vi.restoreAllMocks();
+  });
+});

@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -46,8 +44,8 @@
     --party-gold: 42 100% 55%;
     --lantern-glow: 35 100% 60%;
 
-    --font-display: 'Baloo 2', cursive;
-    --font-body: 'Fredoka', sans-serif;
+    --font-display: Georgia, serif;
+    --font-body: Arial, Helvetica, sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
