@@ -8,6 +8,7 @@ export default function SpotifyPlayer({ trackId, compact = false }: SpotifyPlaye
 
   return (
     <iframe
+      title="Spotify-melodiasoitin"
       src={`https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`}
       width="100%"
       height={height}

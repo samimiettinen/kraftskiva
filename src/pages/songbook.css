@@ -1,0 +1,976 @@
+.songbook {
+  --ink: #172f3e;
+  --red: #b83c2e;
+  --paper: #faf8f2;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+.songbook button,
+.song-dialog button {
+  transition:
+    background 0.18s,
+    color 0.18s;
+}
+.songbook button:focus-visible,
+.songbook a:focus-visible,
+.song-dialog button:focus-visible {
+  outline: 3px solid #c64e34;
+  outline-offset: 4px;
+}
+.songbook h1,
+.songbook h2,
+.songbook h3,
+.wordmark,
+.footer-brand,
+.song-dialog h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -0.045em;
+}
+.book-header {
+  max-width: 1320px;
+  margin: auto;
+  padding: 27px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #d9dedb;
+  gap: 24px;
+}
+.wordmark {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1.1;
+}
+.wordmark span {
+  display: block;
+  font:
+    10px Arial,
+    sans-serif;
+  letter-spacing: 2.1px;
+  margin-top: 9px;
+}
+.book-header nav {
+  display: flex;
+  gap: 28px;
+  align-self: stretch;
+}
+.book-header nav button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  color: #59666a;
+  position: relative;
+}
+.book-header nav button.nav-active {
+  color: var(--red);
+}
+.nav-active:after {
+  content: "";
+  height: 2px;
+  background: var(--red);
+  position: absolute;
+  bottom: -28px;
+  left: 0;
+  right: 0;
+}
+.header-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  border: 1px solid #d6d8ce;
+  border-radius: 30px;
+  padding: 10px 15px;
+  white-space: nowrap;
+}
+.songbook main {
+  max-width: 1220px;
+  margin: auto;
+  padding: 0 0 30px;
+}
+.book-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px 0 38px;
+  gap: 25px;
+}
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.9px;
+  line-height: 1.7;
+}
+.book-intro .eyebrow {
+  color: var(--red);
+  margin-bottom: 14px;
+}
+.book-intro h1 {
+  font-size: clamp(38px, 4.5vw, 65px);
+  line-height: 1.1;
+  font-weight: 400;
+}
+.book-intro em,
+.challenge-teaser em {
+  color: var(--red);
+  font-weight: 400;
+}
+.book-intro > div > p:last-child {
+  margin-top: 18px;
+  color: #657174;
+  max-width: 550px;
+  line-height: 1.7;
+}
+.intro-seal {
+  border: 1px solid #bcc4bc;
+  border-radius: 50%;
+  width: 119px;
+  height: 119px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(10deg);
+  flex-shrink: 0;
+  margin-right: 27px;
+}
+.intro-seal span {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+.intro-seal strong {
+  font: italic 34px Georgia;
+  line-height: 1.5;
+}
+.book-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 304px;
+  gap: 40px;
+}
+.opening-song {
+  height: 266px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #193c37;
+}
+.opening-song img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 56%;
+}
+.opening-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(9, 29, 30, 0.92),
+    rgba(9, 29, 30, 0.6) 43%,
+    rgba(9, 29, 30, 0.05)
+  );
+}
+.opening-copy {
+  position: relative;
+  padding: 29px 34px;
+  color: #fff;
+}
+.opening-copy .eyebrow {
+  color: #e9c39f;
+}
+.opening-copy h2 {
+  font-size: 49px;
+  font-weight: 400;
+  margin: 8px 0 4px;
+}
+.opening-copy > p:not(.eyebrow) {
+  color: #dddcd0;
+  font-size: 15px;
+}
+.cream-button,
+.red-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 44px;
+}
+.cream-button {
+  background: #fcf8ec;
+  color: #213c40;
+  margin-top: 24px;
+}
+.cream-button:hover {
+  background: #e8e0ca;
+}
+.red-button {
+  background: #b83c2e;
+  color: #fff;
+}
+.red-button:hover {
+  background: #982f24;
+}
+.red-button:disabled {
+  background: #e3eadf;
+  color: #355241;
+  cursor: default;
+}
+.photo-caption {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  font-size: 12px;
+  letter-spacing: 1.6px;
+  color: #fff;
+}
+.collection-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 35px 0 21px;
+}
+.collection-heading .eyebrow {
+  font-size: 12px;
+  color: #6d7775;
+  margin-bottom: 4px;
+}
+.collection-heading h2 {
+  font-size: 30px;
+  font-weight: 400;
+}
+.collection-heading h2 span {
+  font:
+    12px Arial,
+    sans-serif;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid #d1d7ce;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+.text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  min-height: 42px;
+}
+.text-button:hover {
+  color: #b83c2e;
+}
+.song-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #d2d9d5;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 15px;
+  height: 50px;
+  color: #71807e;
+}
+.song-search input {
+  background: transparent;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  font-size: 15px;
+  color: #172f3e;
+}
+.song-search:focus-within {
+  outline: 2px solid #b83c2e;
+}
+.song-search button {
+  min-width: 28px;
+  min-height: 36px;
+}
+.filter-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  padding: 16px 0 19px;
+}
+.filter-row button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 13px;
+  font-size: 13px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: #647171;
+  min-height: 38px;
+}
+.filter-row .chosen {
+  background: #203e49;
+  color: white;
+}
+.filter-row button:not(.chosen):hover {
+  background: #eceee7;
+}
+.song-row {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #dce0d7;
+  min-height: 85px;
+}
+.song-row:last-child {
+  border-bottom: 1px solid #dce0d7;
+}
+.song-row:hover {
+  background: #f0f1e9;
+}
+.song-open {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 19px;
+  flex: 1;
+  min-width: 0;
+  padding: 17px 8px 17px 0;
+}
+.song-number {
+  font: italic 21px Georgia;
+  color: #a2aaa0;
+  min-width: 31px;
+}
+.song-summary {
+  flex: 1;
+  min-width: 0;
+}
+.song-summary strong {
+  display: block;
+  font: 21px Georgia;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.song-summary > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #74807e;
+  margin-top: 7px;
+}
+.song-language {
+  font-size: 12px;
+  letter-spacing: 1px;
+  border: 1px solid #dce0d6;
+  padding: 4px 6px;
+}
+.favorite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 44px;
+  color: #85918d;
+}
+.favorite.is-favorite {
+  color: #b83c2e;
+}
+.is-favorite svg {
+  fill: #b83c2e;
+}
+.sung-check {
+  color: #487052;
+}
+.score-card {
+  background: #1b3846;
+  color: #f7f5ed;
+  padding: 25px;
+  border-radius: 4px;
+}
+.aside-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: 1.7px;
+  color: #c7d0cc;
+}
+.score-card h2 {
+  font-size: 31px;
+  font-weight: 400;
+  margin: 22px 0 10px;
+}
+.score-card > p {
+  font-size: 12px;
+  color: #bac8c9;
+  margin-bottom: 20px;
+}
+.score-card > p strong {
+  font-size: 24px;
+  color: #fff;
+  font-weight: 400;
+  margin-right: 4px;
+}
+.score-card [role="progressbar"] {
+  height: 5px;
+  background: #47606a;
+  border-radius: 2px;
+}
+.score-card [role="progressbar"] > div {
+  background: #e2b584;
+}
+.score-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  font-size: 12px;
+  color: #c4ceca;
+}
+.score-meta button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+}
+.challenge-teaser {
+  padding: 28px 26px;
+  border: 1px solid #dce0d4;
+  margin-top: 21px;
+  position: relative;
+  border-radius: 4px;
+}
+.small-icon {
+  display: inline-grid;
+  place-items: center;
+  background: #e9eddf;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 17px;
+}
+.challenge-teaser .eyebrow {
+  font-size: 12px;
+  color: #778373;
+  letter-spacing: 1.3px;
+}
+.challenge-teaser h2 {
+  font-size: 33px;
+  font-weight: 400;
+  line-height: 1.15;
+  margin-top: 12px;
+}
+.challenge-teaser > p:not(.eyebrow) {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #727c74;
+  margin: 17px 0 10px;
+}
+.challenge-teaser .text-button {
+  font-size: 13px;
+}
+.bonus-label {
+  display: block;
+  color: #a3573f;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  margin-top: 18px;
+}
+.table-note {
+  padding: 29px 14px 0;
+}
+.table-note .eyebrow {
+  font-size: 12px;
+  color: #717b75;
+}
+.table-note h3 {
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 12px 0;
+}
+.table-note > p:not(.eyebrow) {
+  font-size: 13px;
+  color: #717b75;
+  line-height: 1.8;
+}
+.table-note > span {
+  display: block;
+  font: italic 16px Georgia;
+  color: #9a5743;
+  margin-top: 18px;
+}
+.book-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid #d9ded4;
+  margin-top: 57px;
+  padding-top: 25px;
+  font-size: 12px;
+  color: #7b857b;
+}
+.footer-brand {
+  font-size: 23px;
+  color: #253f45;
+}
+.empty-state {
+  padding: 45px 20px;
+  text-align: center;
+  color: #62736c;
+}
+.empty-state > svg {
+  margin: 0 auto 15px;
+}
+.empty-state h3 {
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+.empty-state p {
+  font-size: 14px;
+}
+.challenge-card {
+  padding: 32px;
+  border: 1px solid #d5dcce;
+  border-radius: 4px;
+  margin-bottom: 19px;
+}
+.challenge-index {
+  font-size: 12px;
+  color: #b83c2e;
+  letter-spacing: 1.6px;
+}
+.challenge-card h2 {
+  font-size: 34px;
+  margin: 14px 0;
+}
+.challenge-card p {
+  line-height: 1.8;
+  color: #65726b;
+  max-width: 550px;
+}
+.challenge-card > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 23px;
+}
+.legacy-link {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #eaece2;
+  padding: 22px;
+  font-size: 17px;
+}
+.legacy-link span {
+  width: 100%;
+  font-size: 13px;
+  color: #647168;
+}
+.evening-panel {
+  border: 1px solid #d5dcce;
+  padding: 40px;
+  text-align: center;
+}
+.evening-panel > svg {
+  margin: 0 auto 20px;
+  color: #a97036;
+}
+.evening-panel h2 {
+  font-size: 48px;
+  margin: 16px 0 30px;
+}
+.evening-stats {
+  display: flex;
+  justify-content: center;
+  gap: 45px;
+  margin-bottom: 30px;
+}
+.evening-stats strong {
+  display: block;
+  font: 42px Georgia;
+}
+.evening-stats span {
+  font-size: 13px;
+  color: #6c7a73;
+}
+.evening-panel > p:not(.eyebrow) {
+  color: #63726a;
+  line-height: 1.8;
+  font-size: 14px;
+}
+.earned-songs {
+  display: grid;
+  text-align: left;
+  gap: 5px;
+  margin: 25px 0;
+}
+.storage-note {
+  font-size: 12px;
+  margin-top: 25px;
+  color: #6a766c;
+}
+.reset-button {
+  color: #a84735;
+  margin-top: 18px;
+}
+.song-dialog {
+  max-width: 650px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  background: #faf8f2;
+  color: #172f3e;
+  border-radius: 5px;
+  padding: 32px;
+  font-family: Arial, Helvetica, sans-serif;
+  gap: 9px;
+}
+.song-dialog-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  padding-right: 20px;
+}
+.song-dialog h2 {
+  font-size: 38px;
+  line-height: 1.15;
+  font-weight: 400;
+  margin: 8px 0;
+}
+.song-dialog-top .eyebrow {
+  color: #a14938;
+  font-size: 12px;
+}
+.song-dialog [id$="description"] {
+  color: #61706a;
+  font-size: 14px;
+}
+.spotify-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #203e32;
+  color: #fff;
+  border-radius: 4px;
+  padding: 13px;
+  font-size: 14px;
+  margin-top: 12px;
+}
+.spotify-link:hover {
+  background: #2d5745;
+}
+.spotify-note {
+  font-size: 12px;
+  color: #6e7a73;
+  text-align: center;
+}
+.lyrics {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  line-height: 1.65;
+  margin: 22px 0 16px;
+}
+.large-lyrics {
+  font-size: 29px;
+}
+.singing-note {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  background: #eaeede;
+  color: #526242;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.singing-note svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.source-note {
+  font-size: 12px;
+  color: #7b837b;
+  margin: 9px 0;
+}
+.song-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #d4dbcf;
+}
+.skip-link {
+  position: fixed;
+  left: 10px;
+  top: -100px;
+  z-index: 100;
+  background: white;
+  padding: 16px;
+}
+.skip-link:focus {
+  top: 10px;
+}
+@media (min-width: 1440px) {
+  .book-intro {
+    padding-top: 58px;
+    padding-bottom: 45px;
+  }
+  .opening-song {
+    height: 295px;
+  }
+}
+@media (max-width: 1300px) {
+  .songbook main {
+    margin: 0 45px;
+  }
+  .book-header {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+  .book-layout {
+    gap: 28px;
+    grid-template-columns: minmax(0, 1fr) 285px;
+  }
+}
+@media (max-width: 850px) {
+  .book-header {
+    padding: 20px 24px;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .wordmark {
+    font-size: 28px;
+  }
+  .header-score {
+    margin-left: auto;
+  }
+  .book-header nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .book-header nav button {
+    padding: 9px 0;
+    font-size: 13px;
+  }
+  .nav-active:after {
+    bottom: -20px;
+  }
+  .songbook main {
+    margin: 0 24px;
+  }
+  .book-intro {
+    padding: 35px 0 28px;
+  }
+  .book-intro h1 {
+    font-size: 43px;
+  }
+  .intro-seal {
+    width: 85px;
+    height: 85px;
+    margin-right: 0;
+  }
+  .intro-seal strong {
+    font-size: 26px;
+  }
+  .intro-seal span {
+    font-size: 12px;
+  }
+  .book-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 22px;
+  }
+  .score-card {
+    padding: 21px;
+  }
+  .challenge-teaser {
+    padding: 23px 20px;
+  }
+  .photo-caption {
+    display: none;
+  }
+  .opening-copy {
+    padding: 28px;
+  }
+  .collection-heading {
+    align-items: flex-end;
+  }
+  .collection-heading h2 {
+    font-size: 26px;
+  }
+  .collection-heading .text-button {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .song-open {
+    gap: 10px;
+  }
+  .song-summary strong {
+    font-size: 19px;
+  }
+  .song-language {
+    display: none;
+  }
+  .book-footer {
+    flex-wrap: wrap;
+  }
+  .book-footer > span:last-child {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  .book-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .book-intro {
+    gap: 10px;
+  }
+  .book-intro h1 {
+    font-size: 39px;
+    max-width: 330px;
+  }
+  .book-intro > div > p:last-child {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .intro-seal {
+    display: none;
+  }
+  .book-intro .eyebrow {
+    font-size: 12px;
+  }
+  .opening-song {
+    height: 240px;
+  }
+  .opening-copy h2 {
+    font-size: 44px;
+  }
+  .book-aside {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .challenge-teaser {
+    display: none;
+  }
+  .table-note {
+    padding: 24px 4px;
+  }
+  .table-note h3 br {
+    display: none;
+  }
+  .collection-heading {
+    gap: 8px;
+    margin-top: 28px;
+  }
+  .collection-heading h2 {
+    font-size: 27px;
+  }
+  .collection-heading .eyebrow {
+    font-size: 12px;
+  }
+  .filter-row {
+    gap: 2px;
+  }
+  .filter-row button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  .song-summary > span {
+    font-size: 12px;
+  }
+  .song-number {
+    font-size: 18px;
+    min-width: 25px;
+  }
+  .song-summary strong {
+    font-size: 19px;
+  }
+  .song-dialog {
+    width: calc(100% - 24px);
+    padding: 24px 20px;
+    max-height: 92dvh;
+  }
+  .song-dialog h2 {
+    font-size: 32px;
+  }
+  .song-dialog-actions .text-button {
+    font-size: 12px;
+  }
+  .lyrics {
+    font-size: 21px;
+  }
+  .large-lyrics {
+    font-size: 27px;
+  }
+  .book-footer {
+    margin-top: 28px;
+    font-size: 12px;
+  }
+  .challenge-card {
+    padding: 25px;
+  }
+  .challenge-card h2 {
+    font-size: 30px;
+  }
+  .evening-panel {
+    padding: 30px 20px;
+  }
+  .evening-stats {
+    gap: 30px;
+  }
+  .evening-panel h2 {
+    font-size: 39px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media print {
+  .book-header,
+  .book-intro,
+  .book-layout,
+  .book-footer,
+  .song-dialog-top,
+  .spotify-link,
+  .spotify-note,
+  .song-dialog-actions,
+  [data-radix-dialog-overlay] {
+    display: none !important;
+  }
+  .song-dialog {
+    position: static !important;
+    transform: none !important;
+    max-height: none;
+    overflow: visible;
+    width: 100%;
+    border: 0;
+    box-shadow: none;
+  }
+  .song-dialog > button {
+    display: none;
+  }
+  .lyrics {
+    font-size: 18px;
+  }
+}

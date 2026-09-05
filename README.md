@@ -1,75 +1,40 @@
-# Welcome to your Lovable project
+# Kräftskiva · Laulukirja
 
-## Project info
+Rapujuhlien mobiiliin mukautuva laulukirja suomeksi ja ruotsiksi. React, TypeScript ja Vite; alkuperäinen Lovable-arkkitehtuuri säilyy.
 
-Rapujuhlissa (Kräftskiva) lauletaan snapsilauluja suomeksi ja ruotsiksi.
+## Käyttö
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+- `/`: 10 laulun sanat, melodian mukaan muodostettu Spotify-haku, kielisuodattimet, sanahaku ja suosikit.
+- Pöytähaasteet: kolme yhteislauluhaastetta ja linkki alkuperäiseen maaotteluun.
+- Illan saldo: 10 pistettä eri laulusta, 20 eri haasteesta. 40 pisteellä Laulava teekkari, 100 pisteellä Raputohtori.
+- `/maaottelu`: repon alkuperäinen Suomi–Ruotsi-peli.
 
-## How can I edit this code?
+Pisteet ja suosikit tallentuvat selaimen localStorageen (`kraftskiva-book-v1`). Pöydän yhteiseen pistepeliin käytetään yhtä laitetta; laitteiden välistä synkronointia ei ole. Uusi ilta nollaa pisteet vahvistuksen jälkeen ja säilyttää suosikit. Tallennuksen estyminen ei estä pelaamista.
 
-There are several ways of editing your application.
+## Laulut ja Spotify
 
-**Use Lovable**
+Seitsemän alkuperäisen repon sanoitusta on säilytetty. Rapu kulta, Integraali on valmis ja Rapupöydän marssi ovat tätä versiota varten kirjoitettuja uusia sanoituksia. Lähdetyyppi näkyy jokaisessa laulussa. Alkuperäisten laulujen sanoituksia ei ole ulkoisesti toimitettu tai oikeustarkistettu tässä muutoksessa.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Uuden laulukirjan Spotify-painike avaa **melodian haun**, ei ennalta varmennettua äänitettä. Käyttäjä valitsee esityksen Spotifyssa. Alkuperäisen maaottelun olemassa olevat Spotify-upotukset on säilytetty; niiden kappaletunnuksia ei ole tässä varmennettu. Rapujuhlakuvitus on luotu tätä versiota varten.
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Kehitys
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm ci
 npm run dev
+npm run build
+npm test
+npx tsc --noEmit -p tsconfig.app.json
 ```
 
-**Edit a file directly in GitHub**
+Npm-lukituksesta puuttuneet vertaisriippuvuudet on täydennetty, jotta `npm ci` onnistuu.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Lovable ja julkaisu
 
-**Use GitHub Codespaces**
+Uudistus tehdään haaralla `codex/laulukirja`. Älä yhdistä päähaaraan kesken Lovable-muutosten. Tarkista ensin päähaaran uudet muutokset ja yhdistä ne tällä haaralla. Sovelluksen Vite-rakennetta, Lovable-taggeria tai päähaaran kytkentää ei ole muutettu.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+`.openai/hosting.json` kohdistaa erilliseen Sites-versioon. Se ei muuta Lovablen julkaisua. Sites-versio on aluksi vain omistajan käytössä. Julkinen vieraskäyttö edellyttää erillistä jakamista/julkaisua.
 
-## What technologies are used for this project?
+## Tarkistukset
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Uuden laulukirjan testit kattavat sanoilla hakemisen, melodian hakulinkin, pisteiden kertakirjauksen ja säilymisen, vahvistetun nollauksen sekä rikkoutuneen tallennustiedon käsittelyn. Koko repon lintissä on ennestään viisi virhettä tiedostoissa `command.tsx`, `textarea.tsx`, `sounds.ts` ja `tailwind.config.ts`; niitä ei muuteta osana laulukirjaa. Riippuvuusasennuksen audit raportoi myös olemassa olevan riippuvuuskannan haavoittuvuuksia; niitä ei automaattisesti päivitetä tässä ominaisuusmuutoksessa.
